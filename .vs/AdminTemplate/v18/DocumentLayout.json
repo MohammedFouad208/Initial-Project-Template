@@ -48,8 +48,40 @@
         },
         {
           "DockedHeight": 288,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 8,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:5:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:4:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:3:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -58,7 +90,7 @@
               "RelativeDocumentMoniker": "AdminTemplate.Infrastructure\\Data\\Migrations\\20260329150913_InitialCreate.cs",
               "ToolTip": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Infrastructure\\Data\\Migrations\\20260329150913_InitialCreate.cs",
               "RelativeToolTip": "AdminTemplate.Infrastructure\\Data\\Migrations\\20260329150913_InitialCreate.cs",
-              "ViewState": "AgIAAKgAAAAAAAAAAAAAAMkAAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAG8AAAAAAAAAAAAAAIYAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-30T09:16:33.423Z",
               "EditorCaption": ""
@@ -73,8 +105,7 @@
               "RelativeToolTip": "AdminTemplate.Domain\\Entities\\RolePermission.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-30T09:16:22.285Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-30T09:16:22.285Z"
             },
             {
               "$type": "Document",
@@ -86,8 +117,7 @@
               "RelativeToolTip": "AdminTemplate.Domain\\Entities\\ApplicationUser.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-30T09:16:07.296Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-30T09:16:07.296Z"
             },
             {
               "$type": "Document",
@@ -99,8 +129,7 @@
               "RelativeToolTip": "AdminTemplate.Domain\\Entities\\ApplicationRole.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-30T09:01:33.629Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-30T09:01:33.629Z"
             },
             {
               "$type": "Document",
@@ -112,35 +141,12 @@
               "RelativeToolTip": "AdminTemplate.Web\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-03-30T08:56:02.215Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+              "WhenOpened": "2026-03-30T08:56:02.215Z"
             }
           ]
         },
         {
           "DockedHeight": 86,
-          "SelectedChildIndex": -1,
-          "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            }
-          ]
-        },
-        {
-          "DockedHeight": 40,
           "SelectedChildIndex": -1,
           "Children": [
             {
