@@ -1,0 +1,155 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Me\\Projects\\Initial-Project-Template\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3090D011-0359-487B-B047-6A2CB4D66BFB}|AdminTemplate.Infrastructure\\AdminTemplate.Infrastructure.csproj|d:\\me\\projects\\initial-project-template\\admintemplate.infrastructure\\data\\migrations\\20260329150913_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3090D011-0359-487B-B047-6A2CB4D66BFB}|AdminTemplate.Infrastructure\\AdminTemplate.Infrastructure.csproj|solutionrelative:admintemplate.infrastructure\\data\\migrations\\20260329150913_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F9B08AD-57A7-4680-9741-080249BE2FF7}|AdminTemplate.Domain\\AdminTemplate.Domain.csproj|d:\\me\\projects\\initial-project-template\\admintemplate.domain\\entities\\rolepermission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F9B08AD-57A7-4680-9741-080249BE2FF7}|AdminTemplate.Domain\\AdminTemplate.Domain.csproj|solutionrelative:admintemplate.domain\\entities\\rolepermission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F9B08AD-57A7-4680-9741-080249BE2FF7}|AdminTemplate.Domain\\AdminTemplate.Domain.csproj|d:\\me\\projects\\initial-project-template\\admintemplate.domain\\entities\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F9B08AD-57A7-4680-9741-080249BE2FF7}|AdminTemplate.Domain\\AdminTemplate.Domain.csproj|solutionrelative:admintemplate.domain\\entities\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F9B08AD-57A7-4680-9741-080249BE2FF7}|AdminTemplate.Domain\\AdminTemplate.Domain.csproj|d:\\me\\projects\\initial-project-template\\admintemplate.domain\\entities\\applicationrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F9B08AD-57A7-4680-9741-080249BE2FF7}|AdminTemplate.Domain\\AdminTemplate.Domain.csproj|solutionrelative:admintemplate.domain\\entities\\applicationrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{11AF8D1D-4391-4D9E-BD5E-E11083FAE24F}|AdminTemplate.Web\\AdminTemplate.Web.csproj|d:\\me\\projects\\initial-project-template\\admintemplate.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{11AF8D1D-4391-4D9E-BD5E-E11083FAE24F}|AdminTemplate.Web\\AdminTemplate.Web.csproj|solutionrelative:admintemplate.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 1191,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 288,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "20260329150913_InitialCreate.cs",
+              "DocumentMoniker": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Infrastructure\\Data\\Migrations\\20260329150913_InitialCreate.cs",
+              "RelativeDocumentMoniker": "AdminTemplate.Infrastructure\\Data\\Migrations\\20260329150913_InitialCreate.cs",
+              "ToolTip": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Infrastructure\\Data\\Migrations\\20260329150913_InitialCreate.cs",
+              "RelativeToolTip": "AdminTemplate.Infrastructure\\Data\\Migrations\\20260329150913_InitialCreate.cs",
+              "ViewState": "AgIAAKgAAAAAAAAAAAAAAMkAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T09:16:33.423Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RolePermission.cs",
+              "DocumentMoniker": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Domain\\Entities\\RolePermission.cs",
+              "RelativeDocumentMoniker": "AdminTemplate.Domain\\Entities\\RolePermission.cs",
+              "ToolTip": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Domain\\Entities\\RolePermission.cs",
+              "RelativeToolTip": "AdminTemplate.Domain\\Entities\\RolePermission.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T09:16:22.285Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ApplicationUser.cs",
+              "DocumentMoniker": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Domain\\Entities\\ApplicationUser.cs",
+              "RelativeDocumentMoniker": "AdminTemplate.Domain\\Entities\\ApplicationUser.cs",
+              "ToolTip": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Domain\\Entities\\ApplicationUser.cs",
+              "RelativeToolTip": "AdminTemplate.Domain\\Entities\\ApplicationUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T09:16:07.296Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ApplicationRole.cs",
+              "DocumentMoniker": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Domain\\Entities\\ApplicationRole.cs",
+              "RelativeDocumentMoniker": "AdminTemplate.Domain\\Entities\\ApplicationRole.cs",
+              "ToolTip": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Domain\\Entities\\ApplicationRole.cs",
+              "RelativeToolTip": "AdminTemplate.Domain\\Entities\\ApplicationRole.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T09:01:33.629Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Web\\appsettings.json",
+              "RelativeDocumentMoniker": "AdminTemplate.Web\\appsettings.json",
+              "ToolTip": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Web\\appsettings.json",
+              "RelativeToolTip": "AdminTemplate.Web\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-03-30T08:56:02.215Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 86,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 40,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

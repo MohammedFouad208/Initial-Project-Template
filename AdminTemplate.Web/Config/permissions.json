@@ -1,0 +1,24 @@
+﻿{
+  "PermissionObjects": [
+    {
+      "Name": "Employee",
+      "DisplayName": "Employees",
+      "Functions": ["Browse", "Create", "Update", "Delete", "Export"]
+    },
+    {
+      "Name": "User",
+      "DisplayName": "Users",
+      "Functions": ["Browse", "Create", "Update", "Delete"]
+    },
+    {
+      "Name": "Role",
+      "DisplayName": "Roles",
+      "Functions": ["Browse", "Create", "Update", "Delete", "AssignPermissions"]
+    },
+    {
+      "Name": "Report",
+      "DisplayName": "Reports",
+      "Functions": ["Browse", "Export"]
+    }
+  ]
+}
