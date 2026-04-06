@@ -1,8 +1,10 @@
 using System.Threading.Tasks;
 using AdminTemplate.Application.Interfaces;
 using AdminTemplate.Application.Services;
+using AdminTemplate.Domain.Entities;
 using AdminTemplate.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminTemplate.Web.Controllers
@@ -11,10 +13,14 @@ namespace AdminTemplate.Web.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(
+            IAccountService accountService,
+            SignInManager<ApplicationUser> signInManager)
         {
             _accountService = accountService;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -38,7 +44,7 @@ namespace AdminTemplate.Web.Controllers
                 case AdminTemplate.Application.Services.LoginResult.Success:
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                         return LocalRedirect(returnUrl);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Dashboard");
                 case AdminTemplate.Application.Services.LoginResult.Inactive:
                     ModelState.AddModelError(string.Empty, "This account has been deactivated.");
                     break;
@@ -58,8 +64,8 @@ namespace AdminTemplate.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await _accountService.LogoutAsync();
-            return RedirectToAction("Login");
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Account");
         }
 
         // ── Registration ─────────────────────────────────────────────────────

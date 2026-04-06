@@ -1,0 +1,50 @@
+@model AdminTemplate.Web.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid">
+    <div class="row g-3">
+        <div class="col-xl-4 col-md-6">
+            <div class="card dashboard-stat-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="dashboard-stat-label">Total Users</span>
+                        <span class="dashboard-stat-icon">
+                            <i class="fa-solid fa-users"></i>
+                        </span>
+                    </div>
+                    <p class="dashboard-stat-value">@Model.TotalUsers</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card dashboard-stat-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="dashboard-stat-label">Total Roles</span>
+                        <span class="dashboard-stat-icon">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </span>
+                    </div>
+                    <p class="dashboard-stat-value">@Model.TotalRoles</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card dashboard-stat-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="dashboard-stat-label">Active Users</span>
+                        <span class="dashboard-stat-icon">
+                            <i class="fa-solid fa-user-check"></i>
+                        </span>
+                    </div>
+                    <p class="dashboard-stat-value">@Model.ActiveUsers</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

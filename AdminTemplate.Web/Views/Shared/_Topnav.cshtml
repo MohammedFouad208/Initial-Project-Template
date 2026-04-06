@@ -1,0 +1,35 @@
+@{
+    var displayName = User.Identity?.Name ?? "Admin User";
+}
+
+<div class="d-flex w-100 align-items-center justify-content-between">
+    <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-link p-2 sidebar-desktop-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar" aria-label="Toggle sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <span class="topnav-title">Admin Template</span>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+        <button type="button" class="btn btn-link p-0 topnav-icon-btn position-relative" aria-label="Notifications">
+            <i class="fas fa-bell"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger notification-badge">0</span>
+        </button>
+
+        <div class="dropdown">
+            <button class="btn btn-link dropdown-toggle topnav-user text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @displayName
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                    <form method="post" action="/Account/Logout">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="dropdown-item">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
