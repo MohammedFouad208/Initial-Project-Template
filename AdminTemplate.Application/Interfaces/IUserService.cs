@@ -6,6 +6,8 @@ namespace AdminTemplate.Application.Interfaces;
 public interface IUserService
 {
     Task<UserDto?> GetByIdAsync(string id);
+    Task<int> GetTotalCountAsync();
+    Task<int> GetActiveCountAsync();
     Task<(IReadOnlyList<UserDto> Items, int TotalCount)> GetPagedAsync(
         int pageIndex,
         int pageSize,

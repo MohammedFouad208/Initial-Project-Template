@@ -1,14 +1,27 @@
-﻿using AdminTemplate.Application.DTOs;
+using AdminTemplate.Application.DTOs;
 using AdminTemplate.Application.Interfaces;
+using AdminTemplate.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace AdminTemplate.Application.Services;
 
 public class RoleService : IRoleService
 {
+    private readonly RoleManager<ApplicationRole> _roleManager;
+
+    public RoleService(RoleManager<ApplicationRole> roleManager)
+    {
+        _roleManager = roleManager;
+    }
+
     public Task<RoleDto?> GetByIdAsync(string id)
     {
         throw new NotImplementedException();
+    }
+
+    public Task<int> GetTotalCountAsync()
+    {
+        return Task.FromResult(_roleManager.Roles.Count());
     }
 
     public Task<IReadOnlyList<RoleDto>> GetAllAsync()

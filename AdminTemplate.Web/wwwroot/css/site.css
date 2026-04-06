@@ -1,22 +1,78 @@
-html {
-  font-size: 14px;
+:root {
+  --primary-color: #004D82;
+  --primary-dark: #003560;
+  --primary-light: #e8f1f8;
+  --sidebar-width: 260px;
+  --topnav-height: 60px;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
+html,
+body {
   min-height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin-bottom: 60px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bs-tertiary-bg);
+}
+
+.page-content {
+  min-height: calc(100vh - var(--topnav-height));
+  padding: 1.5rem;
+}
+
+.topnav-title {
+  color: var(--primary-dark);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.sidebar-desktop-toggle,
+.topnav-icon-btn,
+.topnav-user {
+  color: var(--primary-dark);
+}
+
+.sidebar-desktop-toggle:hover,
+.topnav-icon-btn:hover,
+.topnav-user:hover {
+  color: var(--primary-color);
+}
+
+.notification-badge {
+  font-size: 0.65rem;
+  transform: translate(-35%, -35%);
+}
+
+.dashboard-stat-card {
+  border: 1px solid var(--bs-border-color);
+  height: 100%;
+}
+
+.dashboard-stat-icon {
+  align-items: center;
+  background-color: var(--primary-light);
+  border-radius: 50%;
+  color: var(--primary-color);
+  display: inline-flex;
+  font-size: 1.35rem;
+  height: 2.75rem;
+  justify-content: center;
+  width: 2.75rem;
+}
+
+.dashboard-stat-label {
+  color: var(--bs-secondary-color);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.dashboard-stat-value {
+  color: var(--primary-dark);
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0;
 }

@@ -6,6 +6,7 @@ namespace AdminTemplate.Application.Interfaces;
 public interface IRoleService
 {
     Task<RoleDto?> GetByIdAsync(string id);
+    Task<int> GetTotalCountAsync();
     Task<IReadOnlyList<RoleDto>> GetAllAsync();
     Task<(IReadOnlyList<RoleDto> Items, int TotalCount)> GetPagedAsync(
         int pageIndex,
