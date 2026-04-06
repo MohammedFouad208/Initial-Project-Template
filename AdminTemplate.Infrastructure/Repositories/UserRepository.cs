@@ -65,4 +65,14 @@ public class UserRepository : IUserRepository
     {
         throw new NotImplementedException();
     }
+
+    public async Task<IReadOnlyList<string>> GetRoleNamesAsync(Guid userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user is null)
+            return [];
+
+        var roles = await _userManager.GetRolesAsync(user);
+        return roles.ToList().AsReadOnly();
+    }
 }

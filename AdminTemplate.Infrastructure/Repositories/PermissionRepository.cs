@@ -68,4 +68,17 @@ public class PermissionRepository : IPermissionRepository
         _context.RolePermissions.Remove(row);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<bool> UserHasPermissionAsync(Guid userId, string objectName, string functionName)
+    {
+        return await _context.UserRoles
+            .Join(_context.RolePermissions,
+                ur => ur.RoleId,
+                rp => rp.RoleId,
+                (ur, rp) => new { ur.UserId, rp.ObjectName, rp.FunctionName })
+            .AnyAsync(x =>
+                x.UserId == userId &&
+                x.ObjectName == objectName &&
+                x.FunctionName == functionName);
+    }
 }
