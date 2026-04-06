@@ -14,4 +14,5 @@ public interface IUserRepository
     Task AddAsync(ApplicationUser user);
     Task UpdateAsync(ApplicationUser user);
     Task DeleteAsync(Guid id);
+    Task<IReadOnlyList<string>> GetRoleNamesAsync(Guid userId);
 }
