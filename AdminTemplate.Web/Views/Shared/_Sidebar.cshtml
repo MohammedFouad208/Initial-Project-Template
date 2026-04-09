@@ -1,4 +1,4 @@
-@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     var appName = Configuration["App:Name"] ?? "Admin Template";
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
@@ -9,36 +9,52 @@
             : string.Empty;
 }
 
-<div class="sidebar offcanvas-md offcanvas-start" id="adminSidebar" tabindex="-1" aria-labelledby="adminSidebarLabel">
-    <div class="offcanvas-header border-bottom border-secondary-subtle d-md-none">
-        <h5 class="offcanvas-title sidebar-brand-text mb-0" id="adminSidebarLabel">@appName</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#adminSidebar" aria-label="Close"></button>
-    </div>
-
-    <div class="sidebar-header d-none d-md-flex">
+<aside class="sidebar" id="adminSidebar" aria-label="Main navigation">
+    <div class="sidebar-header">
         <a asp-controller="Dashboard" asp-action="Index" class="sidebar-brand">
+            <span class="sidebar-brand-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </span>
             <span class="sidebar-brand-text">@appName</span>
         </a>
+        <button class="sidebar-close-btn d-md-none" type="button" aria-label="Close sidebar">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
     </div>
 
     <div class="offcanvas-body">
         <nav class="sidebar-nav">
-            <a asp-controller="Dashboard" asp-action="Index" class="nav-link @ActiveClass("Dashboard")">
+            <div class="sidebar-nav-label">Main</div>
+
+            <a asp-controller="Dashboard" asp-action="Index"
+               class="nav-link @ActiveClass("Dashboard")"
+               title="Dashboard">
                 <span class="nav-icon"><i class="fa-solid fa-gauge-high"></i></span>
                 <span class="nav-text">Dashboard</span>
             </a>
-            <a asp-controller="Users" asp-action="Index" class="nav-link @ActiveClass("Users")">
+
+            <div class="sidebar-nav-label">Management</div>
+
+            <a asp-controller="Users" asp-action="Index"
+               class="nav-link @ActiveClass("Users")"
+               title="Users">
                 <span class="nav-icon"><i class="fa-solid fa-users"></i></span>
                 <span class="nav-text">Users</span>
             </a>
-            <a asp-controller="Roles" asp-action="Index" class="nav-link @ActiveClass("Roles")">
+
+            <a asp-controller="Roles" asp-action="Index"
+               class="nav-link @ActiveClass("Roles")"
+               title="Roles">
                 <span class="nav-icon"><i class="fa-solid fa-shield-halved"></i></span>
                 <span class="nav-text">Roles</span>
             </a>
-            <a asp-controller="RolePermissions" asp-action="Index" class="nav-link @ActiveClass("RolePermissions")">
+
+            <a asp-controller="RolePermissions" asp-action="Index"
+               class="nav-link @ActiveClass("RolePermissions")"
+               title="Role Permissions">
                 <span class="nav-icon"><i class="fa-solid fa-key"></i></span>
                 <span class="nav-text">Role Permissions</span>
             </a>
         </nav>
     </div>
-</div>
+</aside>
