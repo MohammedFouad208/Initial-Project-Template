@@ -34,7 +34,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<DataSeeder>();
 
         // Application-level and cross-cutting services for Auth
-        services.AddScoped<AdminTemplate.Application.Providers.IEmailSender, AdminTemplate.Infrastructure.Providers.NoOpEmailSender>();
+        services.AddScoped<IEmailSender, AdminTemplate.Infrastructure.Providers.NoOpEmailSender>();
         services.AddScoped<AdminTemplate.Application.Interfaces.IAccountService, AdminTemplate.Infrastructure.Services.AccountService>();
 
         return services;

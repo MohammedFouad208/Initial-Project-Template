@@ -11,11 +11,27 @@
   Removed sections: None
   Templates requiring updates:
     - .specify/templates/plan-template.md ✅ no changes needed
-      (Constitution Check section is generic; will be filled per feature)
     - .specify/templates/spec-template.md ✅ no changes needed
-      (Template is feature-agnostic; constitution constrains content)
     - .specify/templates/tasks-template.md ✅ no changes needed
-      (Phase structure aligns with constitution principles)
+  Follow-up TODOs: None
+  ==================================================
+
+  Sync Impact Report (v1.1.0)
+  ==================================================
+  Version change: 1.0.0 → 1.1.0
+  Last amended: 2026-04-07
+  Modified sections:
+    - Core Principles: added Principle VIII (Design System First)
+    - Technology Stack: added Fonts row; updated Font Awesome to 6.7+
+    - Forbidden Patterns: 4 new entries (hardcoded colors, d-flex on body,
+      Html.Partial, direction-specific properties)
+    - New section: Design System Standards (color tokens, RTL rules,
+      component classes, typography)
+  Templates requiring updates:
+    - .specify/templates/plan-template.md ✅ already updated (Plans/Plan.md
+      already reflects new design system governance)
+    - .specify/templates/spec-template.md ✅ no structural change needed
+    - .specify/templates/tasks-template.md ✅ no structural change needed
   Follow-up TODOs: None
   ==================================================
 -->
@@ -116,6 +132,25 @@ Export) based on the current user's permissions.
 - Sidebar menu items MUST be hidden when the user lacks
   Browse permission for the corresponding object.
 
+### VIII. Design System First (NON-NEGOTIABLE)
+
+Every view MUST use the CSS custom properties defined
+in `wwwroot/css/site.css`. No hardcoded color values,
+spacing values, or font declarations are permitted.
+
+- The design token layer (`site.css`) is the single
+  source of truth for visual decisions.
+- All components (buttons, cards, badges, modals) MUST
+  use the established class patterns documented in the
+  Design System Standards section of this constitution.
+- RTL support is achieved through CSS logical properties
+  (`margin-inline-start`, `padding-inline-end`, etc.);
+  direction-specific properties (`margin-left`,
+  `padding-right`) are forbidden.
+- The split-panel `_AuthLayout.cshtml` and sidebar
+  `_Sidebar.cshtml` MUST NOT be modified to use inline
+  styles or Bootstrap utility overrides.
+
 ## Technology Stack & Constraints
 
 ### Mandated Stack
@@ -128,7 +163,8 @@ Export) based on the current user's permissions.
 | Database | SQL Server | 2019+ |
 | Frontend | Bootstrap | 5.3 |
 | Data Tables | DataTables.net | 1.13+ |
-| Icons | Font Awesome | 6.x |
+| Fonts | Inter (LTR) / Cairo (RTL) | Google Fonts |
+| Icons | Font Awesome | 6.7+ |
 | Package Manager | NuGet (PM Console) | — |
 | EF Migrations | Package Manager Console | — |
 
@@ -158,6 +194,74 @@ Export) based on the current user's permissions.
   always read from `permissions.json`.
 - Per-page jQuery DataTable initialization MUST NOT
   exist — always use the generic `datatable.js`.
+- Hardcoded color, spacing, or font values MUST NOT
+  appear in any CSS, Razor, or HTML file — always
+  reference a CSS custom property (e.g., `var(--primary)`).
+- `d-flex` MUST NOT be applied to `<body>` — the fixed
+  sidebar layout uses `margin-inline-start` on
+  `.main-wrapper` instead.
+- `@Html.Partial()` MUST NOT be used — always use the
+  `<partial>` tag helper.
+- Direction-specific CSS properties (`left`, `right`,
+  `margin-left`, `padding-right`, etc.) MUST NOT be
+  used — replace with CSS logical properties
+  (`inline-start`, `inline-end`).
+
+## Design System Standards
+
+### Color Tokens
+
+| Token | Value | Usage |
+|---|---|---|
+| `--primary` | `#4f46e5` | Primary actions, links, active states |
+| `--primary-dark` | `#4338ca` | Hover/focus states for primary |
+| `--primary-light` | `#ede9fe` | Soft badges, backgrounds |
+| `--success` | `#10b981` | Success states, badges |
+| `--danger` | `#ef4444` | Destructive actions, errors |
+| `--warning` | `#f59e0b` | Warnings |
+| `--info` | `#3b82f6` | Info states |
+| `--text-primary` | `#1e293b` | Body text |
+| `--text-secondary` | `#64748b` | Labels, captions |
+| `--border-color` | `#e2e8f0` | Borders, dividers |
+| `--body-bg` | `#f1f5f9` | Page background |
+| `--sidebar-bg` | `#1e1b4b` | Sidebar background |
+| `--sidebar-width` | `260px` | Sidebar expanded width |
+| `--sidebar-collapsed` | `72px` | Sidebar collapsed width |
+
+### Component Classes
+
+| Component | Required Classes |
+|---|---|
+| Primary button | `.btn.btn-primary` |
+| Danger button | `.btn.btn-danger` |
+| Outline secondary | `.btn.btn-outline-secondary` |
+| Outline danger | `.btn.btn-outline-danger` |
+| Soft badge (success) | `.badge.badge-soft.badge-soft-success` |
+| Soft badge (danger) | `.badge.badge-soft.badge-soft-danger` |
+| Stat card | `.stat-card` with `.stat-icon` and `.stat-value[data-count]` |
+| Page card | `.card.table-card` |
+| Form field with icon | `.field-icon-wrap` wrapping `<input>` + `<span class="field-icon">` |
+
+### Typography
+
+- Body font (LTR): Inter, sans-serif
+- Body font (RTL): Cairo, sans-serif
+- Font switching is automatic via `[dir="rtl"]` CSS selector in `site.css`
+- Do not declare `font-family` in component CSS; rely on the root rule in `site.css`
+
+### RTL Rules
+
+- Direction is toggled by setting `dir` attribute on `<html>` and persisted in `localStorage` key `textDirection`
+- Use `margin-inline-start` / `margin-inline-end` instead of `margin-left` / `margin-right`
+- Use `padding-inline-start` / `padding-inline-end` instead of `padding-left` / `padding-right`
+- Use `inset-inline-start` / `inset-inline-end` instead of `left` / `right` in positioned elements
+- `border-inline-start` / `border-inline-end` instead of `border-left` / `border-right`
+
+### Layout Specs
+
+**Sidebar**: `position: fixed; inset-block: 0; inset-inline-start: 0;` — width controlled by `--sidebar-width`. `.main-wrapper` uses `margin-inline-start: var(--sidebar-width)`. Collapsed state: `body.sidebar-collapsed` reduces both to `--sidebar-collapsed`.
+
+**Auth layout**: Two-column split — decorative panel (`.auth-panel`, 45% width, gradient using `--primary`) on inline-start; form panel (`.auth-form-panel`) on inline-end. Collapses to single column below 768 px.
 
 ## Security Requirements
 
@@ -208,4 +312,4 @@ suggestions that conflict with the principles above.
 - Code reviews MUST verify that no forbidden pattern
   has been introduced.
 
-**Version**: 1.0.0 | **Ratified**: 2026-03-29 | **Last Amended**: 2026-03-29
+**Version**: 1.1.0 | **Ratified**: 2026-03-29 | **Last Amended**: 2026-04-07

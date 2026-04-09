@@ -1,35 +1,58 @@
-@{
-    var displayName = User.Identity?.Name ?? "Admin User";
+﻿@{
+    var displayName = User.Identity?.Name ?? "Admin";
+    var nameParts = displayName.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
+    var initials  = nameParts.Length >= 2
+        ? (nameParts[0][0].ToString() + nameParts[1][0].ToString()).ToUpper()
+        : displayName.Length > 0 ? displayName[0].ToString().ToUpper() : "A";
 }
 
-<div class="d-flex w-100 align-items-center justify-content-between">
+<div class="d-flex w-100 align-items-center justify-content-between gap-2">
+
     <div class="d-flex align-items-center gap-2">
-        <button class="btn btn-link p-2 sidebar-desktop-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar" aria-label="Toggle sidebar">
+        <button class="sidebar-desktop-toggle" type="button" aria-label="Toggle sidebar">
             <i class="fa-solid fa-bars"></i>
         </button>
-        <span class="topnav-title">Admin Template</span>
+        <span class="topnav-title d-none d-sm-block">@(ViewData["Title"]?.ToString() ?? "Dashboard")</span>
     </div>
 
-    <div class="d-flex align-items-center gap-3">
-        <button type="button" class="btn btn-link p-0 topnav-icon-btn position-relative" aria-label="Notifications">
-            <i class="fas fa-bell"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger notification-badge">0</span>
+    <div class="d-flex align-items-center gap-2">
+
+        <button class="rtl-toggle-btn" type="button" title="Switch to RTL">RTL</button>
+
+        <button type="button" class="topnav-icon-btn position-relative" aria-label="Notifications">
+            <i class="fa-regular fa-bell"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger notification-badge">3</span>
         </button>
 
         <div class="dropdown">
-            <button class="btn btn-link dropdown-toggle topnav-user text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                @displayName
+            <button class="topnav-user-btn dropdown-toggle text-decoration-none"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    style="border:none;background:transparent;">
+                <span class="topnav-avatar" aria-hidden="true">@initials</span>
+                <span class="d-none d-md-inline" style="font-size:0.875rem;font-weight:500;color:var(--text-primary)">@displayName</span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><hr class="dropdown-divider" /></li>
+            <ul class="dropdown-menu dropdown-menu-end mt-1" style="min-width:200px">
+                <li>
+                    <span class="dropdown-item pe-none" style="font-size:0.8125rem;color:var(--text-muted);cursor:default">
+                        <i class="fa-regular fa-circle-user"></i> @displayName
+                    </span>
+                </li>
+                <li><hr class="dropdown-divider my-1" /></li>
+                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user"></i> Profile</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                <li><hr class="dropdown-divider my-1" /></li>
                 <li>
                     <form method="post" action="/Account/Logout">
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="dropdown-item">Logout</button>
+                        <button type="submit" class="dropdown-item text-danger" style="width:100%;text-align:start;background:none;border:none">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </button>
                     </form>
                 </li>
             </ul>
         </div>
+
     </div>
 </div>
