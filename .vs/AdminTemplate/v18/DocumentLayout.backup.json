@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "D:\\Me\\Projects\\Initial-Project-Template\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3090D011-0359-487B-B047-6A2CB4D66BFB}|AdminTemplate.Infrastructure\\AdminTemplate.Infrastructure.csproj|d:\\me\\projects\\initial-project-template\\admintemplate.infrastructure\\data\\migrations\\20260329150913_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3090D011-0359-487B-B047-6A2CB4D66BFB}|AdminTemplate.Infrastructure\\AdminTemplate.Infrastructure.csproj|solutionrelative:admintemplate.infrastructure\\data\\migrations\\20260329150913_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{11AF8D1D-4391-4D9E-BD5E-E11083FAE24F}|AdminTemplate.Web\\AdminTemplate.Web.csproj|d:\\me\\projects\\initial-project-template\\admintemplate.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{11AF8D1D-4391-4D9E-BD5E-E11083FAE24F}|AdminTemplate.Web\\AdminTemplate.Web.csproj|solutionrelative:admintemplate.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3090D011-0359-487B-B047-6A2CB4D66BFB}|AdminTemplate.Infrastructure\\AdminTemplate.Infrastructure.csproj|d:\\me\\projects\\initial-project-template\\admintemplate.infrastructure\\seed\\dataseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3090D011-0359-487B-B047-6A2CB4D66BFB}|AdminTemplate.Infrastructure\\AdminTemplate.Infrastructure.csproj|solutionrelative:admintemplate.infrastructure\\seed\\dataseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3090D011-0359-487B-B047-6A2CB4D66BFB}|AdminTemplate.Infrastructure\\AdminTemplate.Infrastructure.csproj|d:\\me\\projects\\initial-project-template\\admintemplate.infrastructure\\data\\migrations\\20260411120000_seedfullaccessformohammedfouad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3090D011-0359-487B-B047-6A2CB4D66BFB}|AdminTemplate.Infrastructure\\AdminTemplate.Infrastructure.csproj|solutionrelative:admintemplate.infrastructure\\data\\migrations\\20260411120000_seedfullaccessformohammedfouad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1F9B08AD-57A7-4680-9741-080249BE2FF7}|AdminTemplate.Domain\\AdminTemplate.Domain.csproj|d:\\me\\projects\\initial-project-template\\admintemplate.domain\\entities\\rolepermission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -17,10 +25,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{1F9B08AD-57A7-4680-9741-080249BE2FF7}|AdminTemplate.Domain\\AdminTemplate.Domain.csproj|d:\\me\\projects\\initial-project-template\\admintemplate.domain\\entities\\applicationrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1F9B08AD-57A7-4680-9741-080249BE2FF7}|AdminTemplate.Domain\\AdminTemplate.Domain.csproj|solutionrelative:admintemplate.domain\\entities\\applicationrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{11AF8D1D-4391-4D9E-BD5E-E11083FAE24F}|AdminTemplate.Web\\AdminTemplate.Web.csproj|d:\\me\\projects\\initial-project-template\\admintemplate.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{11AF8D1D-4391-4D9E-BD5E-E11083FAE24F}|AdminTemplate.Web\\AdminTemplate.Web.csproj|solutionrelative:admintemplate.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,6 +38,10 @@
           "Children": [
             {
               "$type": "Bookmark",
+              "Name": "ST:131:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
@@ -43,40 +51,33 @@
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
             }
           ]
         },
         {
-          "DockedHeight": 288,
-          "SelectedChildIndex": 8,
+          "DockedHeight": 550,
+          "SelectedChildIndex": 5,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:5:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:4:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:3:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DataSeeder.cs",
+              "DocumentMoniker": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Infrastructure\\Seed\\DataSeeder.cs",
+              "RelativeDocumentMoniker": "AdminTemplate.Infrastructure\\Seed\\DataSeeder.cs",
+              "ToolTip": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Infrastructure\\Seed\\DataSeeder.cs",
+              "RelativeToolTip": "AdminTemplate.Infrastructure\\Seed\\DataSeeder.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAQwBQAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-12T09:20:50.414Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
@@ -84,20 +85,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "20260329150913_InitialCreate.cs",
-              "DocumentMoniker": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Infrastructure\\Data\\Migrations\\20260329150913_InitialCreate.cs",
-              "RelativeDocumentMoniker": "AdminTemplate.Infrastructure\\Data\\Migrations\\20260329150913_InitialCreate.cs",
-              "ToolTip": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Infrastructure\\Data\\Migrations\\20260329150913_InitialCreate.cs",
-              "RelativeToolTip": "AdminTemplate.Infrastructure\\Data\\Migrations\\20260329150913_InitialCreate.cs",
-              "ViewState": "AgIAAG8AAAAAAAAAAAAAAIYAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-30T09:16:33.423Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "RolePermission.cs",
               "DocumentMoniker": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Domain\\Entities\\RolePermission.cs",
               "RelativeDocumentMoniker": "AdminTemplate.Domain\\Entities\\RolePermission.cs",
@@ -109,7 +97,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "ApplicationUser.cs",
               "DocumentMoniker": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Domain\\Entities\\ApplicationUser.cs",
               "RelativeDocumentMoniker": "AdminTemplate.Domain\\Entities\\ApplicationUser.cs",
@@ -121,7 +109,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "ApplicationRole.cs",
               "DocumentMoniker": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Domain\\Entities\\ApplicationRole.cs",
               "RelativeDocumentMoniker": "AdminTemplate.Domain\\Entities\\ApplicationRole.cs",
@@ -133,15 +121,29 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Web\\appsettings.json",
               "RelativeDocumentMoniker": "AdminTemplate.Web\\appsettings.json",
               "ToolTip": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Web\\appsettings.json",
               "RelativeToolTip": "AdminTemplate.Web\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAEAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-03-30T08:56:02.215Z"
+              "WhenOpened": "2026-03-30T08:56:02.215Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "20260411120000_SeedFullAccessForMohammedFouad.cs",
+              "DocumentMoniker": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Infrastructure\\Data\\Migrations\\20260411120000_SeedFullAccessForMohammedFouad.cs",
+              "RelativeDocumentMoniker": "AdminTemplate.Infrastructure\\Data\\Migrations\\20260411120000_SeedFullAccessForMohammedFouad.cs",
+              "ToolTip": "D:\\Me\\Projects\\Initial-Project-Template\\AdminTemplate.Infrastructure\\Data\\Migrations\\20260411120000_SeedFullAccessForMohammedFouad.cs",
+              "RelativeToolTip": "AdminTemplate.Infrastructure\\Data\\Migrations\\20260411120000_SeedFullAccessForMohammedFouad.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwD8AAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-12T09:19:17.887Z",
+              "EditorCaption": ""
             }
           ]
         },
@@ -152,6 +154,20 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 228,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:5:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             }
           ]
         }

@@ -1,6 +1,7 @@
 ﻿using AdminTemplate.Domain.Entities;
 using AdminTemplate.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdminTemplate.Infrastructure.Repositories;
 
@@ -13,22 +14,40 @@ public class UserRepository : IUserRepository
         _userManager = userManager;
     }
 
-    public Task<ApplicationUser?> GetByIdAsync(Guid id)
+    public async Task<ApplicationUser?> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _userManager.FindByIdAsync(id.ToString());
     }
 
-    public Task<IReadOnlyList<ApplicationUser>> GetAllAsync()
+    public async Task<IReadOnlyList<ApplicationUser>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _userManager.Users
+            .OrderBy(u => u.FullName)
+            .ToListAsync();
     }
 
-    public Task<(IReadOnlyList<ApplicationUser> Items, int TotalCount)> GetPagedAsync(
+    public async Task<(IReadOnlyList<ApplicationUser> Items, int TotalCount)> GetPagedAsync(
         int pageIndex,
         int pageSize,
         string? searchTerm = null)
     {
-        throw new NotImplementedException();
+        var query = _userManager.Users.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(u =>
+                u.FullName.Contains(searchTerm) ||
+                (u.Email != null && u.Email.Contains(searchTerm)));
+        }
+
+        var total = await query.CountAsync();
+        var items = await query
+            .OrderBy(u => u.FullName)
+            .Skip(pageIndex)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items.AsReadOnly(), total);
     }
 
     public async Task<ApplicationUser?> GetByEmailAsync(string email)
@@ -56,14 +75,18 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public Task UpdateAsync(ApplicationUser user)
+    public async Task UpdateAsync(ApplicationUser user)
     {
-        throw new NotImplementedException();
+        await _userManager.UpdateAsync(user);
     }
 
-    public Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var user = await _userManager.FindByIdAsync(id.ToString());
+        if (user is not null)
+        {
+            await _userManager.DeleteAsync(user);
+        }
     }
 
     public async Task<IReadOnlyList<string>> GetRoleNamesAsync(Guid userId)

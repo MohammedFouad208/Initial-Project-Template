@@ -1,0 +1,91 @@
+@model AdminTemplate.Web.ViewModels.Users.EditUserViewModel
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
+    <div>
+        <h1 class="mb-1">Edit User</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none" style="color:var(--primary)">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a asp-controller="Users" asp-action="Index" class="text-decoration-none" style="color:var(--primary)">Users</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Edit</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div asp-validation-summary="ModelOnly"
+             class="alert alert-danger mb-4"
+             style="border-inline-start:4px solid var(--danger)"
+             role="alert">
+        </div>
+
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post" novalidate>
+            @Html.AntiForgeryToken()
+            <input asp-for="Id" type="hidden" />
+
+            <div class="row g-3">
+                <!-- Full Name -->
+                <div class="col-md-6">
+                    <label asp-for="FullName" class="form-label"></label>
+                    <div class="field-icon-wrap">
+                        <span class="field-icon"><i class="fa-solid fa-user"></i></span>
+                        <input asp-for="FullName" class="form-control" placeholder="Enter full name" />
+                    </div>
+                    <span asp-validation-for="FullName" class="text-danger small"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label"></label>
+                    <div class="field-icon-wrap">
+                        <span class="field-icon"><i class="fa-solid fa-envelope"></i></span>
+                        <input asp-for="Email" class="form-control" placeholder="Enter email address" />
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+
+                <!-- Roles -->
+                <div class="col-md-6">
+                    <label class="form-label">Roles</label>
+                    <select name="SelectedRoles" class="form-select" multiple
+                            aria-label="Select one or more roles">
+                        @foreach (var role in Model.AvailableRoles)
+                        {
+                            var selected = Model.SelectedRoles.Contains(role.Name) ? "selected" : null;
+                            <option value="@role.Name" selected="@selected">@role.Name</option>
+                        }
+                    </select>
+                    <div class="form-text">Hold Ctrl / Cmd to select multiple roles.</div>
+                </div>
+
+                <!-- Active toggle -->
+                <div class="col-md-6 d-flex align-items-end pb-1">
+                    <div class="form-check form-switch">
+                        <input asp-for="IsActive" class="form-check-input" role="switch" />
+                        <label asp-for="IsActive" class="form-check-label">Active</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fa-solid fa-floppy-disk me-1"></i>Save Changes
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
