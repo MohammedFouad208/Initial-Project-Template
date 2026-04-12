@@ -11,7 +11,9 @@ public interface IRoleService
     Task<(IReadOnlyList<RoleDto> Items, int TotalCount)> GetPagedAsync(
         int pageIndex,
         int pageSize,
-        string? searchTerm = null);
+        string? searchTerm = null,
+        string sortColumn = "name",
+        string sortDirection = "asc");
     Task<IdentityResult> CreateAsync(CreateRoleDto dto);
     Task<IdentityResult> UpdateAsync(string id, UpdateRoleDto dto);
     Task<IdentityResult> DeleteAsync(string id);

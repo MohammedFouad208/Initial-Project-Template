@@ -10,9 +10,12 @@ public interface IRoleRepository
     Task<(IReadOnlyList<ApplicationRole> Items, int TotalCount)> GetPagedAsync(
         int pageIndex,
         int pageSize,
-        string? searchTerm = null);
+        string? searchTerm = null,
+        string sortColumn = "name",
+        string sortDirection = "asc");
     Task AddAsync(ApplicationRole role);
     Task UpdateAsync(ApplicationRole role);
     Task DeleteAsync(Guid id);
     Task<bool> HasUsersAsync(Guid roleId);
+    Task<int> GetUserCountAsync(Guid roleId);
 }

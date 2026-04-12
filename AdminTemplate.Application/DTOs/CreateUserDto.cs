@@ -4,4 +4,5 @@ public record CreateUserDto(
     string FullName,
     string Email,
     string Password,
-    IReadOnlyList<string> Roles);
+    IReadOnlyList<string> Roles,
+    bool IsActive = true);

@@ -1,4 +1,5 @@
 ﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@using System.Security.Claims
 @{
     var appName = Configuration["App:Name"] ?? "Admin Template";
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
@@ -7,6 +8,14 @@
         string.Equals(currentController, controllerName, StringComparison.OrdinalIgnoreCase)
             ? "active"
             : string.Empty;
+
+    // Permission checks for sidebar visibility
+    var sidebarUserIdStr = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    Guid.TryParse(sidebarUserIdStr, out var sidebarUserId);
+    var canBrowseUsers = sidebarUserId != Guid.Empty
+        && await PermissionService.UserHasPermissionAsync(sidebarUserId, "User", "Browse");
+    var canBrowseRoles = sidebarUserId != Guid.Empty
+        && await PermissionService.UserHasPermissionAsync(sidebarUserId, "Role", "Browse");
 }
 
 <aside class="sidebar" id="adminSidebar" aria-label="Main navigation">
@@ -36,14 +45,14 @@
             <div class="sidebar-nav-label">Management</div>
 
             <a asp-controller="Users" asp-action="Index"
-               class="nav-link @ActiveClass("Users")"
+               class="nav-link @ActiveClass("Users") @(canBrowseUsers ? "" : "d-none")"
                title="Users">
                 <span class="nav-icon"><i class="fa-solid fa-users"></i></span>
                 <span class="nav-text">Users</span>
             </a>
 
             <a asp-controller="Roles" asp-action="Index"
-               class="nav-link @ActiveClass("Roles")"
+               class="nav-link @ActiveClass("Roles") @(canBrowseRoles ? "" : "d-none")"
                title="Roles">
                 <span class="nav-icon"><i class="fa-solid fa-shield-halved"></i></span>
                 <span class="nav-text">Roles</span>

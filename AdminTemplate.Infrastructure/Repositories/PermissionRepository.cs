@@ -30,6 +30,11 @@ public class PermissionRepository : IPermissionRepository
             rp.FunctionName == functionName);
     }
 
+    public async Task<int> GetCountByRoleIdAsync(Guid roleId)
+    {
+        return await _context.RolePermissions.CountAsync(rp => rp.RoleId == roleId);
+    }
+
     public async Task AddAsync(RolePermission permission)
     {
         await _context.RolePermissions.AddAsync(permission);

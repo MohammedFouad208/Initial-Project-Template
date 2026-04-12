@@ -1,0 +1,157 @@
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
+    <div>
+        <h1 class="mb-1">Users</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none" style="color:var(--primary)">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Users</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert"
+         style="border-inline-start:4px solid var(--success)">
+        <i class="fa-solid fa-circle-check me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card table-card">
+    <div class="card-body">
+        <table id="usersTable" class="table table-hover w-100"></table>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+<partial name="_DeleteConfirmModal" />
+
+@section Scripts {
+<script>
+var _canUpdate = @Json.Serialize(ViewBag.CanUpdate);
+AppDataTable.init({
+    tableId: 'usersTable',
+    ajaxUrl: '@Url.Action("GetData", "Users")',
+    columns: [
+        {
+            data: 'fullName',
+            title: 'Name',
+            render: function (val, type, row) {
+                if (type !== 'display') { return val || ''; }
+                var initials = (val || '')
+                    .split(' ')
+                    .filter(function (w) { return w.length > 0; })
+                    .map(function (w) { return w[0].toUpperCase(); })
+                    .slice(0, 2)
+                    .join('');
+                return '<div class="d-flex align-items-center gap-2">' +
+                       '<span class="avatar-initials" aria-hidden="true">' + initials + '</span>' +
+                       '<span>' + (val || '—') + '</span>' +
+                       '</div>';
+            }
+        },
+        { data: 'email', title: 'Email' },
+        {
+            data: 'roles',
+            title: 'Roles',
+            orderable: false,
+            render: function (val, type) {
+                if (type !== 'display') { return val ? val.join(', ') : ''; }
+                if (!val || val.length === 0) {
+                    return '<span class="text-muted fst-italic">No roles</span>';
+                }
+                return val.map(function (r) {
+                    return '<span class="badge badge-soft badge-soft-primary me-1">' + r + '</span>';
+                }).join('');
+            }
+        },
+        {
+            data: 'isActive',
+            title: 'Status',
+            render: function (val, type, row) {
+                if (type !== 'display') { return val ? 'Active' : 'Inactive'; }
+                var badge = val
+                    ? '<span class="badge badge-soft badge-soft-success dt-status-badge">Active</span>'
+                    : '<span class="badge badge-soft badge-soft-danger dt-status-badge">Inactive</span>';
+                if (_canUpdate) {
+                    var btnClass = val ? 'btn-outline-danger' : 'btn-outline-success';
+                    var btnIcon  = val ? 'fa-user-slash' : 'fa-user-check';
+                    var btnTitle = val ? 'Deactivate' : 'Activate';
+                    badge += '<button type="button" class="btn ' + btnClass + ' btn-sm dt-toggle-active ms-1" ' +
+                        'data-id="' + row.id + '" data-active="' + val + '" title="' + btnTitle + '">' +
+                        '<i class="fa-solid ' + btnIcon + '"></i></button>';
+                }
+                return badge;
+            }
+        },
+        {
+            data: 'createdAt',
+            title: 'Created',
+            render: function (val, type) {
+                if (!val) { return '—'; }
+                if (type !== 'display') { return val; }
+                return new Date(val).toLocaleDateString();
+            }
+        }
+    ],
+    permissions: {
+        canCreate: @Json.Serialize(ViewBag.CanCreate),
+        canUpdate: @Json.Serialize(ViewBag.CanUpdate),
+        canDelete: false
+    },
+    createUrl: '@Url.Action("Create", "Users")',
+    editUrl:   '@Url.Action("Edit", "Users")/:id',
+    objectName: 'User'
+});
+
+if (_canUpdate) {
+// Wire activate/deactivate toggle buttons (rendered by the actions column)
+$(document).on('click', '.dt-toggle-active', function () {
+    var $btn    = $(this);
+    var userId  = $btn.data('id');
+    var isActive = $btn.data('active') === true || $btn.data('active') === 'true';
+    var newState = !isActive;
+    var token   = $('input[name="__RequestVerificationToken"]').val();
+
+    if (!token) { console.warn('CSRF token missing'); return; }
+
+    fetch('@Url.Action("ToggleActive", "Users")', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'RequestVerificationToken': token
+        },
+        body: 'id=' + encodeURIComponent(userId) + '&isActive=' + newState
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (res) {
+        if (!res.success) { console.error('Toggle failed:', res.error); return; }
+        var $row  = $btn.closest('tr');
+        var $badge = $row.find('.dt-status-badge');
+        if (newState) {
+            $badge.removeClass('badge-soft-danger').addClass('badge-soft-success').text('Active');
+            $btn.data('active', true)
+                .removeClass('btn-outline-success').addClass('btn-outline-danger')
+                .attr('title', 'Deactivate')
+                .html('<i class="fa-solid fa-user-slash"></i>');
+        } else {
+            $badge.removeClass('badge-soft-success').addClass('badge-soft-danger').text('Inactive');
+            $btn.data('active', false)
+                .removeClass('btn-outline-danger').addClass('btn-outline-success')
+                .attr('title', 'Activate')
+                .html('<i class="fa-solid fa-user-check"></i>');
+        }
+    })
+    .catch(function (e) { console.error('ToggleActive error:', e); });
+});
+}
+</script>
+}

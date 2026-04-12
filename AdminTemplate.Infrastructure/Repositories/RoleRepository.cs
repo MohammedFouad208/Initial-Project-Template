@@ -18,22 +18,50 @@ public class RoleRepository : IRoleRepository
         _userManager = userManager;
     }
 
-    public Task<ApplicationRole?> GetByIdAsync(Guid id)
+    public async Task<ApplicationRole?> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _roleManager.FindByIdAsync(id.ToString());
     }
 
-    public Task<IReadOnlyList<ApplicationRole>> GetAllAsync()
+    public async Task<IReadOnlyList<ApplicationRole>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _roleManager.Roles
+            .OrderBy(r => r.Name)
+            .ToListAsync();
     }
 
-    public Task<(IReadOnlyList<ApplicationRole> Items, int TotalCount)> GetPagedAsync(
+    public async Task<(IReadOnlyList<ApplicationRole> Items, int TotalCount)> GetPagedAsync(
         int pageIndex,
         int pageSize,
-        string? searchTerm = null)
+        string? searchTerm = null,
+        string sortColumn = "name",
+        string sortDirection = "asc")
     {
-        throw new NotImplementedException();
+        var query = _roleManager.Roles.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(r =>
+                r.Name!.Contains(searchTerm) ||
+                (r.Description != null && r.Description.Contains(searchTerm)));
+        }
+
+        var total = await query.CountAsync();
+
+        var isDesc = string.Equals(sortDirection, "desc", StringComparison.OrdinalIgnoreCase);
+        query = sortColumn.ToLowerInvariant() switch
+        {
+            "description"  => isDesc ? query.OrderByDescending(r => r.Description) : query.OrderBy(r => r.Description),
+            "createdat"    => isDesc ? query.OrderByDescending(r => r.CreatedAt)   : query.OrderBy(r => r.CreatedAt),
+            _              => isDesc ? query.OrderByDescending(r => r.Name)        : query.OrderBy(r => r.Name)
+        };
+
+        var items = await query
+            .Skip(pageIndex * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, total);
     }
 
     public async Task<ApplicationRole?> GetByNameAsync(string name)
@@ -52,14 +80,20 @@ public class RoleRepository : IRoleRepository
         }
     }
 
-    public Task UpdateAsync(ApplicationRole role)
+    public async Task UpdateAsync(ApplicationRole role)
     {
-        throw new NotImplementedException();
+        await _roleManager.UpdateAsync(role);
     }
 
-    public Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var role = await _roleManager.FindByIdAsync(id.ToString());
+        if (role is null)
+        {
+            return;
+        }
+
+        await _roleManager.DeleteAsync(role);
     }
 
     public async Task<bool> HasUsersAsync(Guid roleId)
@@ -72,5 +106,17 @@ public class RoleRepository : IRoleRepository
 
         var users = await _userManager.GetUsersInRoleAsync(role.Name);
         return users.Count > 0;
+    }
+
+    public async Task<int> GetUserCountAsync(Guid roleId)
+    {
+        var role = await _roleManager.FindByIdAsync(roleId.ToString());
+        if (role is null || string.IsNullOrWhiteSpace(role.Name))
+        {
+            return 0;
+        }
+
+        var users = await _userManager.GetUsersInRoleAsync(role.Name);
+        return users.Count;
     }
 }
