@@ -93,7 +93,8 @@ public class RolesController : Controller
             return View(vm);
         }
 
-        TempData["Success"] = "Role created successfully.";
+        TempData["ToastMessage"] = "Role created successfully.";
+        TempData["ToastType"] = "success";
         return RedirectToAction(nameof(Index));
     }
 
@@ -140,7 +141,8 @@ public class RolesController : Controller
             return View(vm);
         }
 
-        TempData["Success"] = "Role updated successfully.";
+        TempData["ToastMessage"] = "Role updated successfully.";
+        TempData["ToastType"] = "success";
         return RedirectToAction(nameof(Index));
     }
 

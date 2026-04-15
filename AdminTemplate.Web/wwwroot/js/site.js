@@ -156,3 +156,42 @@ function addRippleEffect() {
     });
   });
 }
+
+/* ============================================================
+   Toast Notifications
+   ============================================================ */
+var AppToast = (function () {
+  function show(message, type) {
+    type = type || "info";
+    var colors = {
+      success: "var(--success)",
+      danger:  "var(--danger)",
+      warning: "var(--warning)",
+      info:    "var(--info)"
+    };
+    var accent = colors[type] || colors.info;
+
+    var el = document.createElement("div");
+    el.className = "toast align-items-center border-0 shadow";
+    el.setAttribute("role", "alert");
+    el.setAttribute("aria-live", "assertive");
+    el.setAttribute("aria-atomic", "true");
+    el.style.borderInlineStart = "4px solid " + accent;
+
+    el.innerHTML =
+      '<div class="d-flex">' +
+      '  <div class="toast-body">' + message + '</div>' +
+      '  <button type="button" class="btn-close me-2 m-auto"' +
+      '    data-bs-dismiss="toast" aria-label="Close"></button>' +
+      '</div>';
+
+    var container = document.getElementById("toast-container");
+    if (container) { container.appendChild(el); }
+
+    var toast = bootstrap.Toast.getOrCreateInstance(el, { delay: 4000 });
+    el.addEventListener("hidden.bs.toast", function () { el.remove(); });
+    toast.show();
+  }
+
+  return { show: show };
+}());

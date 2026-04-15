@@ -9,10 +9,10 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none" style="color:var(--primary)">Home</a>
+                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none breadcrumb-link">Home</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a asp-controller="Users" asp-action="Index" class="text-decoration-none" style="color:var(--primary)">Users</a>
+                    <a asp-controller="Users" asp-action="Index" class="text-decoration-none breadcrumb-link">Users</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">Create</li>
             </ol>
@@ -75,7 +75,7 @@
                 <!-- Roles -->
                 <div class="col-md-6">
                     <label class="form-label">Roles</label>
-                    <select name="SelectedRoles" class="form-select" multiple
+                    <select id="rolesSelect" name="SelectedRoles" class="form-select" multiple
                             aria-label="Select one or more roles">
                         @foreach (var role in Model.AvailableRoles)
                         {
@@ -83,7 +83,6 @@
                             <option value="@role.Name" selected="@selected">@role.Name</option>
                         }
                     </select>
-                    <div class="form-text">Hold Ctrl / Cmd to select multiple roles.</div>
                 </div>
 
                 <!-- Active toggle -->
@@ -96,10 +95,10 @@
             </div>
 
             <div class="d-flex gap-2 mt-4">
-                <button type="submit" class="btn btn-primary btn-lg">
+                <button type="submit" class="btn btn-primary btn-sm">
                     <i class="fa-solid fa-floppy-disk me-1"></i>Create User
                 </button>
-                <a asp-action="Index" class="btn btn-outline-secondary btn-lg">Cancel</a>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Cancel</a>
             </div>
         </form>
     </div>
@@ -107,4 +106,14 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(function () {
+            $('#rolesSelect').select2({
+                theme: 'bootstrap-5',
+                placeholder: 'Select roles',
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
 }

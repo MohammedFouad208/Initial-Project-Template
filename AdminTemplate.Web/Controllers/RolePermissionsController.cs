@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AdminTemplate.Web.Controllers;
 
 [Authorize]
+[Route("RolePermissions")]
 public class RolePermissionsController : Controller
 {
     private readonly IRoleService _roleService;
@@ -27,7 +28,7 @@ public class RolePermissionsController : Controller
 
     // ─── GET /RolePermissions/{roleId} ────────────────────────────────────
 
-    [HttpGet]
+    [HttpGet("{roleId}")]
     [HasPermission("Role", "AssignPermissions")]
     public async Task<IActionResult> Index(string roleId)
     {
@@ -57,7 +58,7 @@ public class RolePermissionsController : Controller
 
     // ─── POST /RolePermissions/Save ───────────────────────────────────────
 
-    [HttpPost]
+    [HttpPost("Save")]
     [ValidateAntiForgeryToken]
     [HasPermission("Role", "AssignPermissions")]
     public async Task<IActionResult> Save(string roleId, List<string>? selectedPermissions)
@@ -73,11 +74,13 @@ public class RolePermissionsController : Controller
                 .Select(parts => new PermissionDto(parts[0], parts[1]));
 
             await _permissionService.SaveRolePermissionsAsync(guid, permissions);
-            TempData["Success"] = "Permissions saved successfully.";
+            TempData["ToastMessage"] = "Permissions saved successfully.";
+            TempData["ToastType"] = "success";
         }
         catch (Exception)
         {
-            TempData["Error"] = "An error occurred while saving permissions.";
+            TempData["ToastMessage"] = "An error occurred while saving permissions.";
+            TempData["ToastType"] = "danger";
         }
 
         return RedirectToAction(nameof(Index), new { roleId });

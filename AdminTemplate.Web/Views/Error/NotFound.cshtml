@@ -1,0 +1,26 @@
+@{
+    ViewData["Title"] = "Page Not Found";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
+    <div>
+        <h1 class="page-title">Page Not Found</h1>
+    </div>
+</div>
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6 text-center">
+        <div class="error-icon-circle warning-circle mx-auto mb-4">
+            <i class="fa-solid fa-circle-question"></i>
+        </div>
+        <h2 class="fw-bold mb-3">404 — Page Not Found</h2>
+        <p class="text-muted mb-4">
+            The page you are looking for does not exist or may have been moved.<br />
+            Check the URL and try again.
+        </p>
+        <a asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-house me-2"></i>Back to Home
+        </a>
+    </div>
+</div>
