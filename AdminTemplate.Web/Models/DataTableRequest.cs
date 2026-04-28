@@ -8,4 +8,5 @@ public class DataTableRequest
     public string? Search { get; set; }
     public int SortColumn { get; set; }
     public string SortDirection { get; set; } = "asc";
+    public Dictionary<string, string> Filters { get; set; } = [];
 }

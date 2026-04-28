@@ -23,6 +23,7 @@
 # IDE settings
 .vscode/
 .idea/
+.vs/
 
 # OS files
 .DS_Store

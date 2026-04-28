@@ -1,0 +1,56 @@
+@{
+    ViewData["Title"] = "System Admin";
+}
+
+<div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
+    <div>
+        <h1 class="mb-1"><i class="fa-solid fa-code me-2 text-primary"></i>System Admin</h1>
+        <p class="text-muted mb-0">Code generation, theme configuration, and system tools</p>
+    </div>
+</div>
+
+<div class="row g-4 mt-2">
+    <div class="col-md-4">
+        <a asp-area="SystemAdmin" asp-controller="EntityBuilder" asp-action="Index"
+           class="card card-hover text-decoration-none">
+            <div class="card-body text-center p-4">
+                <div class="mb-3">
+                    <i class="fa-solid fa-database fa-3x text-primary"></i>
+                </div>
+                <h5 class="card-title text-body">Entity Builder</h5>
+                <p class="card-text text-muted small">
+                    Design entities, define columns and relations, then generate full CRUD code automatically.
+                </p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a asp-area="SystemAdmin" asp-controller="Theme" asp-action="Index"
+           class="card card-hover text-decoration-none">
+            <div class="card-body text-center p-4">
+                <div class="mb-3">
+                    <i class="fa-solid fa-palette fa-3x text-warning"></i>
+                </div>
+                <h5 class="card-title text-body">Theme Engine</h5>
+                <p class="card-text text-muted small">
+                    Customize colors, fonts and layout. Changes are applied globally across the entire app.
+                </p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center p-4">
+                <div class="mb-3">
+                    <i class="fa-solid fa-shield-halved fa-3x text-success"></i>
+                </div>
+                <h5 class="card-title">Access Control</h5>
+                <p class="card-text text-muted small">
+                    Permissions for generated entities are auto-inserted and assigned to the SuperAdmin role.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

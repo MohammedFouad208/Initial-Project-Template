@@ -1,0 +1,261 @@
+@using AdminTemplate.Web.Areas.SystemAdmin.Models
+@model CreateEntityViewModel
+@{
+    var entityId  = ViewBag.EntityId as Guid?;
+    var isEdit    = entityId.HasValue;
+    var pageTitle = isEdit ? $"Edit Entity: {Model.Name}" : "New Entity";
+    ViewData["Title"] = pageTitle;
+}
+
+<div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
+    <div>
+        <h1 class="mb-1">@pageTitle</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="SystemAdmin" asp-controller="Home" asp-action="Index"
+                       class="text-decoration-none" style="color:var(--primary)">System Admin</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a asp-action="Index" class="text-decoration-none" style="color:var(--primary)">Entity Builder</a>
+                </li>
+                @if (isEdit)
+                {
+                    <li class="breadcrumb-item">
+                        <a asp-action="Details" asp-route-id="@entityId"
+                           class="text-decoration-none" style="color:var(--primary)">@Model.Name</a>
+                    </li>
+                    <li class="breadcrumb-item active">Edit</li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item active">New Entity</li>
+                }
+            </ol>
+        </nav>
+    </div>
+</div>
+
+@{
+    var formAction = isEdit ? "Edit" : "Create";
+}
+<form asp-action="@formAction" asp-route-id="@entityId" method="post" novalidate id="entityForm">
+    @Html.AntiForgeryToken()
+
+    <!-- ── Entity Info ─────────────────────────────────────────────────── -->
+    <div class="card mb-4">
+        <div class="card-header fw-semibold"><i class="fa-solid fa-info-circle me-2"></i>Entity Information</div>
+        <div class="card-body">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"
+                     style="border-inline-start:4px solid var(--danger)"></div>
+            }
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label asp-for="Name" class="form-label">Entity Name <span class="text-danger">*</span></label>
+                    <input asp-for="Name" class="form-control" placeholder="e.g. Product" id="entityNameInput" />
+                    <div class="form-text">PascalCase. Used as class name and table name prefix.</div>
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="TableName" class="form-label">Table Name</label>
+                    <input asp-for="TableName" class="form-control" placeholder="Auto-generated if empty" id="tableNameInput" />
+                    <div class="form-text">Leave empty to auto-pluralize.</div>
+                </div>
+                <div class="col-12">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="2"
+                              placeholder="Optional description"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Columns ─────────────────────────────────────────────────────── -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span class="fw-semibold"><i class="fa-solid fa-columns me-2"></i>Columns</span>
+            <button type="button" class="btn btn-outline-primary btn-sm" id="addColumnBtn">
+                <i class="fa-solid fa-plus me-1"></i>Add Column
+            </button>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0" id="columnsTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:180px">Name</th>
+                            <th style="width:130px">Type</th>
+                            <th style="width:80px">MaxLen</th>
+                            <th style="width:70px">Required</th>
+                            <th style="width:70px">Unique</th>
+                            <th style="width:70px">In List</th>
+                            <th style="width:70px">In Form</th>
+                            <th style="width:70px" title="Include this column in the server-side search filter">Search</th>
+                            <th style="width:50px"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="columnRows"></tbody>
+                </table>
+            </div>
+            <div id="noColumnsMsg" class="text-center text-muted py-3 small">
+                No columns yet. Click "Add Column" to begin.
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Relations ──────────────────────────────────────────────────── -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span class="fw-semibold"><i class="fa-solid fa-link me-2"></i>Relations</span>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="addRelationBtn">
+                <i class="fa-solid fa-plus me-1"></i>Add Relation
+            </button>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Related Entity</th>
+                            <th>FK Column</th>
+                            <th>Navigation Property</th>
+                            <th>Display Column</th>
+                            <th>Type</th>
+                            <th style="width:50px"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="relationRows"></tbody>
+                </table>
+            </div>
+            <div id="noRelationsMsg" class="text-center text-muted py-3 small">
+                No relations yet.
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-floppy-disk me-1"></i>@(isEdit ? "Save Changes" : "Save Entity")
+        </button>
+        @if (isEdit)
+        {
+            <a asp-action="Details" asp-route-id="@entityId" class="btn btn-outline-secondary btn-lg">Cancel</a>
+        }
+        else
+        {
+            <a asp-action="Index" class="btn btn-outline-secondary btn-lg">Cancel</a>
+        }
+    </div>
+</form>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<script>
+var colIndex = 0;
+var relIndex = 0;
+var dataTypes = ['string','int','long','decimal','double','bool','DateTime','Guid'];
+var nonSearchableTypes = ['int','long','decimal','double','bool','DateTime','Guid'];
+
+function _esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderCheck(name, val) {
+    return '<input type="checkbox" class="form-check-input" name="' + name + '" value="true"' + (val ? ' checked' : '') + '>' +
+           '<input type="hidden" name="' + name + '" value="false">';
+}
+
+function addColumn(data) {
+    var i = colIndex++;
+    var d = data || {};
+    var opts = dataTypes.map(function(t) {
+        return '<option value="' + t + '"' + (d.DataType === t ? ' selected' : '') + '>' + t + '</option>';
+    }).join('');
+    var row = '<tr>' +
+        '<td><input type="text" class="form-control form-control-sm" name="Columns[' + i + '].Name" value="' + _esc(d.Name || '') + '" required /></td>' +
+        '<td><select class="form-select form-select-sm" name="Columns[' + i + '].DataType">' + opts + '</select></td>' +
+        '<td><input type="number" class="form-control form-control-sm" name="Columns[' + i + '].MaxLength" min="1" value="' + (d.MaxLength || '') + '" /></td>' +
+        '<td class="text-center">' + renderCheck('Columns[' + i + '].IsRequired', d.IsRequired) + '</td>' +
+        '<td class="text-center">' + renderCheck('Columns[' + i + '].IsUnique', d.IsUnique) + '</td>' +
+        '<td class="text-center">' + renderCheck('Columns[' + i + '].ShowInList', d.ShowInList !== false) + '</td>' +
+        '<td class="text-center">' + renderCheck('Columns[' + i + '].ShowInForm', d.ShowInForm !== false) + '</td>' +
+        '<td class="text-center search-col-cell">' + renderCheck('Columns[' + i + '].UseInSearch', d.UseInSearch) + '</td>' +
+        '<input type="hidden" name="Columns[' + i + '].SortOrder" value="' + (d.SortOrder != null ? d.SortOrder : i) + '" />' +
+        '<td><button type="button" class="btn btn-outline-danger btn-sm remove-row"><i class="fa-solid fa-xmark"></i></button></td>' +
+        '</tr>';
+    $('#columnRows').append(row);
+    updateSearchCheckbox($('#columnRows tr:last'));
+    updateColumnVisibility();
+}
+
+function addRelation(data) {
+    var i = relIndex++;
+    var d = data || {};
+    var row = '<tr>' +
+        '<td><input type="text" class="form-control form-control-sm" name="Relations[' + i + '].RelatedEntityName" value="' + _esc(d.RelatedEntityName || '') + '" placeholder="e.g. Category" required /></td>' +
+        '<td><input type="text" class="form-control form-control-sm" name="Relations[' + i + '].ForeignKeyName" value="' + _esc(d.ForeignKeyName || '') + '" placeholder="e.g. CategoryId" required /></td>' +
+        '<td><input type="text" class="form-control form-control-sm" name="Relations[' + i + '].NavigationPropertyName" value="' + _esc(d.NavigationPropertyName || '') + '" placeholder="e.g. Category" required /></td>' +
+        '<td><input type="text" class="form-control form-control-sm" name="Relations[' + i + '].DisplayColumn" value="' + _esc(d.DisplayColumn || 'Name') + '" /></td>' +
+        '<td><select class="form-select form-select-sm" name="Relations[' + i + '].RelationType">' +
+            '<option value="0"' + (d.RelationType === 0 ? ' selected' : '') + '>Many → One</option>' +
+            '<option value="1"' + (d.RelationType === 1 ? ' selected' : '') + '>One → One</option>' +
+        '</select></td>' +
+        '<td><button type="button" class="btn btn-outline-danger btn-sm remove-row"><i class="fa-solid fa-xmark"></i></button></td>' +
+        '</tr>';
+    $('#relationRows').append(row);
+    updateRelationVisibility();
+}
+
+function updateColumnVisibility()  { $('#noColumnsMsg').toggle($('#columnRows tr').length === 0); }
+function updateRelationVisibility() { $('#noRelationsMsg').toggle($('#relationRows tr').length === 0); }
+
+function updateSearchCheckbox($row) {
+    var type  = $row.find('select[name*=".DataType"]').val();
+    var $cell = $row.find('.search-col-cell');
+    var $cb   = $cell.find('input[type="checkbox"]');
+    var $hid  = $cell.find('input[type="hidden"]');
+    if (nonSearchableTypes.indexOf(type) !== -1) {
+        $cb.prop('checked', false).prop('disabled', true);
+        $hid.val('false');
+        $cell.attr('title', 'Search is only available for string columns');
+    } else {
+        $cb.prop('disabled', false);
+        $cell.removeAttr('title');
+    }
+}
+
+$('#addColumnBtn').on('click', function () { addColumn(); });
+$('#addRelationBtn').on('click', function () { addRelation(); });
+
+$(document).on('click', '.remove-row', function () {
+    $(this).closest('tr').remove();
+    updateColumnVisibility();
+    updateRelationVisibility();
+});
+
+$(document).on('change', 'select[name*=".DataType"]', function () {
+    updateSearchCheckbox($(this).closest('tr'));
+});
+
+$(document).on('input', '[name*=".RelatedEntityName"]', function () {
+    var val = $(this).val().trim();
+    var $row = $(this).closest('tr');
+    var fkInput  = $row.find('[name*=".ForeignKeyName"]');
+    var navInput = $row.find('[name*=".NavigationPropertyName"]');
+    if (fkInput.val()  === '') fkInput.val(val + 'Id');
+    if (navInput.val() === '') navInput.val(val);
+});
+
+// Pre-populate existing data (edit mode)
+var existingColumns   = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Columns));
+var existingRelations = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Relations));
+
+existingColumns.forEach(function (c)  { addColumn(c); });
+existingRelations.forEach(function (r) { addRelation(r); });
+
+updateColumnVisibility();
+updateRelationVisibility();
+</script>
+}
