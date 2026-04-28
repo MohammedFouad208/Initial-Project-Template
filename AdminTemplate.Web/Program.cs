@@ -48,6 +48,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseStatusCodePagesWithRedirects("/Error/NotFound");
+
 app.UseRouting();
 
 app.UseAuthentication();

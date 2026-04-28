@@ -8,7 +8,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none" style="color:var(--primary)">Home</a>
+                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none breadcrumb-link">Home</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">Users</li>
             </ol>
@@ -37,7 +37,9 @@
 @section Scripts {
 <script>
 var _canUpdate = @Json.Serialize(ViewBag.CanUpdate);
-AppDataTable.init({
+var _canDelete = @Json.Serialize(ViewBag.CanDelete);
+var usersTable;
+usersTable = AppDataTable.init({
     tableId: 'usersTable',
     ajaxUrl: '@Url.Action("GetData", "Users")',
     columns: [
@@ -99,16 +101,36 @@ AppDataTable.init({
                 if (!val) { return '—'; }
                 if (type !== 'display') { return val; }
                 return new Date(val).toLocaleDateString();
-            }
-        }
+            }        },
+        {
+            data: null,
+            title: 'Actions',
+            orderable: false,
+            searchable: false,
+            render: function (data, type, row) {
+                if (type !== 'display') { return ''; }
+                var html = '<div class="d-flex gap-1">';
+                if (_canUpdate) {
+                    html += '<a href="@Url.Action("Edit", "Users")/' + row.id + '" ' +
+                            'class="btn btn-outline-secondary btn-sm" title="Edit">' +
+                            '<i class="fa-solid fa-pen-to-square"></i></a>';
+                }
+                if (_canDelete) {
+                    html += '<button type="button" class="btn btn-outline-danger btn-sm dt-user-delete-btn" ' +
+                            'data-delete-url="@Url.Action("Delete", "Users")/' + row.id + '" ' +
+                            'data-record-label="' + (row.fullName || row.email || row.id) + '" title="Delete">' +
+                            '<i class="fa-solid fa-trash"></i></button>';
+                }
+                html += '</div>';
+                return html;
+            }        }
     ],
     permissions: {
         canCreate: @Json.Serialize(ViewBag.CanCreate),
-        canUpdate: @Json.Serialize(ViewBag.CanUpdate),
+        canUpdate: false,
         canDelete: false
     },
     createUrl: '@Url.Action("Create", "Users")',
-    editUrl:   '@Url.Action("Edit", "Users")/:id',
     objectName: 'User'
 });
 
@@ -153,5 +175,55 @@ $(document).on('click', '.dt-toggle-active', function () {
     .catch(function (e) { console.error('ToggleActive error:', e); });
 });
 }
+
+// ── Delete modal wiring ────────────────────────────────────────────
+$('#usersTable').on('click', '.dt-user-delete-btn', function () {
+    var $btn      = $(this);
+    var deleteUrl = $btn.data('delete-url');
+    var label     = $btn.data('record-label');
+    var $modal    = $('#deleteConfirmModal');
+
+    $modal.find('#deleteConfirmBody')
+          .text('Are you sure you want to delete the user "' + label + '"? This action cannot be undone.');
+
+    $modal.find('.dt-delete-error').remove();
+    $modal.find('#deleteConfirmBtn').data('delete-url', deleteUrl);
+    bootstrap.Modal.getOrCreateInstance($modal[0]).show();
+});
+
+$(document).on('click', '#deleteConfirmBtn', function () {
+    var deleteUrl = $(this).data('delete-url');
+    var $modal    = $('#deleteConfirmModal');
+    var token     = $('input[name="__RequestVerificationToken"]').val();
+
+    if (!token) { console.warn('CSRF token missing'); return; }
+
+    fetch(deleteUrl, {
+        method:  'POST',
+        headers: { 'RequestVerificationToken': token }
+    })
+    .then(function (res) { return res.json(); })
+    .then(function (result) {
+        if (result.success) {
+            bootstrap.Modal.getOrCreateInstance($modal[0]).hide();
+            usersTable.ajax.reload(null, false);
+        } else {
+            $modal.find('.dt-delete-error').remove();
+            var $alert = $('<div class="alert alert-danger dt-delete-error mt-3 mb-0" ' +
+                           'style="border-inline-start:4px solid var(--danger)">' +
+                           '<i class="fa-solid fa-circle-exclamation me-2"></i>' +
+                           (result.message || 'Failed to delete user.') +
+                           '</div>');
+            $modal.find('.modal-body').append($alert);
+        }
+    })
+    .catch(function () {
+        $modal.find('.dt-delete-error').remove();
+        var $alert = $('<div class="alert alert-danger dt-delete-error mt-3 mb-0" ' +
+                       'style="border-inline-start:4px solid var(--danger)">' +
+                       'An unexpected error occurred. Please try again.</div>');
+        $modal.find('.modal-body').append($alert);
+    });
+});
 </script>
 }

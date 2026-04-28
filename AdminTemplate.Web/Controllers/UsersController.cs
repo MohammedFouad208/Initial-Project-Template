@@ -104,7 +104,8 @@ public class UsersController : Controller
             return View(vm);
         }
 
-        TempData["Success"] = "User created successfully.";
+        TempData["ToastMessage"] = "User created successfully.";
+        TempData["ToastType"] = "success";
         return RedirectToAction(nameof(Index));
     }
 
@@ -160,7 +161,8 @@ public class UsersController : Controller
             return View(vm);
         }
 
-        TempData["Success"] = "User updated successfully.";
+        TempData["ToastMessage"] = "User updated successfully.";
+        TempData["ToastType"] = "success";
         return RedirectToAction(nameof(Index));
     }
 
@@ -179,5 +181,26 @@ public class UsersController : Controller
 
         var error = result.Errors.FirstOrDefault()?.Description ?? "Failed to update user status.";
         return Json(new { success = false, error });
+    }
+
+    // ─── Delete ───────────────────────────────────────────────────────────
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [HasPermission("User", "Delete")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var result = await _userService.DeleteAsync(id);
+
+        if (result.Succeeded)
+        {
+            return Json(new { success = true });
+        }
+
+        return Json(new
+        {
+            success = false,
+            message = result.Errors.FirstOrDefault()?.Description ?? "Failed to delete user."
+        });
     }
 }

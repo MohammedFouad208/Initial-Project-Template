@@ -122,16 +122,13 @@ body {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   width: 4px;
   height: 100%;
-  border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
-}
-
-[dir="rtl"] .stat-card::before {
-  left: auto;
-  right: 0;
-  border-radius: 0 var(--border-radius-lg) var(--border-radius-lg) 0;
+  border-start-start-radius: var(--border-radius-lg);
+  border-end-start-radius: var(--border-radius-lg);
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
 }
 
 .stat-card.stat-primary::before { background: var(--primary); }
@@ -435,7 +432,7 @@ body {
   pointer-events: none;
   width: 100px;
   height: 100px;
-  margin-left: -50px;
+  margin-inline-start: -50px;
   margin-top: -50px;
 }
 
@@ -571,6 +568,35 @@ body {
   font-size: 0.8125rem;
   margin-bottom: 0;
 }
+
+/* ============================================================
+   Breadcrumb Link
+   ============================================================ */
+.breadcrumb-link {
+  color: var(--primary);
+  text-decoration: none;
+}
+.breadcrumb-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+/* ============================================================
+   Error Icon Circle
+   ============================================================ */
+.error-icon-circle {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 2rem;
+}
+.error-icon-circle.danger-circle  { background: var(--danger-light);  color: var(--danger);  }
+.error-icon-circle.warning-circle { background: var(--warning-light); color: var(--warning); }
+.error-icon-circle.info-circle    { background: var(--info-light);    color: var(--info);    }
 
 /* ============================================================
    Responsive

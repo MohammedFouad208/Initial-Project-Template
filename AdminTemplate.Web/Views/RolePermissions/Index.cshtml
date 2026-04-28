@@ -50,10 +50,10 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none" style="color:var(--primary)">Home</a>
+                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none breadcrumb-link">Home</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a asp-controller="Roles" asp-action="Index" class="text-decoration-none" style="color:var(--primary)">Roles</a>
+                    <a asp-controller="Roles" asp-action="Index" class="text-decoration-none breadcrumb-link">Roles</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">Manage Permissions</li>
             </ol>
@@ -147,16 +147,17 @@
     </div>
 
     <div class="mt-3">
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary btn-sm">
             <i class="fa-solid fa-floppy-disk me-1"></i>Save Permissions
         </button>
-        <a asp-controller="Roles" asp-action="Index" class="btn btn-outline-secondary ms-2">
+        <a asp-controller="Roles" asp-action="Index" class="btn btn-outline-secondary btn-sm ms-2">
             <i class="fa-solid fa-arrow-left me-1"></i>Back to Roles
         </a>
     </div>
 </form>
 
 @section Scripts {
+<partial name="_ValidationScriptsPartial" />
 <script>
 (function () {
     // Row: Check All
