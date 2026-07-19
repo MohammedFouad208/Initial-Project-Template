@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName"
+      dir="@(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ar" ? "rtl" : "ltr")">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,13 +16,6 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/sidebar.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/theme.css" asp-append-version="true" />
-    <script>
-        (function () {
-            var d = localStorage.getItem("textDirection") || "ltr";
-            document.documentElement.setAttribute("dir", d);
-            document.documentElement.setAttribute("lang", d === "rtl" ? "ar" : "en");
-        }());
-    </script>
 </head>
 <body>
     <div class="sidebar-backdrop"></div>

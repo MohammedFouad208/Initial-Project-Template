@@ -136,16 +136,16 @@
     </div>
 
     <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-primary btn-lg">
+        <button type="submit" class="btn btn-primary btn-md">
             <i class="fa-solid fa-floppy-disk me-1"></i>@(isEdit ? "Save Changes" : "Save Entity")
         </button>
         @if (isEdit)
         {
-            <a asp-action="Details" asp-route-id="@entityId" class="btn btn-outline-secondary btn-lg">Cancel</a>
+            <a asp-action="Details" asp-route-id="@entityId" class="btn btn-outline-secondary btn-md">Cancel</a>
         }
         else
         {
-            <a asp-action="Index" class="btn btn-outline-secondary btn-lg">Cancel</a>
+            <a asp-action="Index" class="btn btn-outline-secondary btn-md">Cancel</a>
         }
     </div>
 </form>

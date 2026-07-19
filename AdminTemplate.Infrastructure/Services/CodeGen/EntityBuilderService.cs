@@ -3,7 +3,6 @@ using AdminTemplate.Application.Interfaces.CodeGen;
 using AdminTemplate.Domain.Entities.CodeGen;
 using AdminTemplate.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
 
 namespace AdminTemplate.Infrastructure.Services.CodeGen;
 
@@ -144,16 +143,14 @@ public class EntityBuilderService : IEntityBuilderService
         return Map(entity);
     }
 
-    public async Task DeleteEntityAsync(Guid id)
+    public async Task DeleteEntityAsync(Guid id, string projectRoot)
     {
         var entity = await _db.EntityDefinitions.FindAsync(id);
         if (entity is null) return;
 
-        // Drop the generated table if it exists
-        var tableName = string.IsNullOrWhiteSpace(entity.TableName) ? Pluralize(entity.Name) : entity.TableName;
-        await _db.Database.ExecuteSqlRawAsync(
-            $"IF EXISTS (SELECT * FROM sys.tables WHERE name = '{tableName}') DROP TABLE [{tableName}]");
-
+        // The table itself is dropped by an EF migration generated from the removed
+        // entity/DbSet (see EntityBuilderController.Delete). Here we only remove the
+        // entity definition metadata.
         _db.EntityDefinitions.Remove(entity);
         await _db.SaveChangesAsync();
     }
@@ -167,77 +164,6 @@ public class EntityBuilderService : IEntityBuilderService
             entity.GeneratedAt = DateTime.UtcNow;
             await _db.SaveChangesAsync();
         }
-    }
-
-    public async Task<string> GenerateSqlAsync(EntityDefinitionDto entity)
-    {
-        // Build a lookup of entity name → actual table name for FK references
-        var allEntities = await _db.EntityDefinitions
-            .Select(e => new { e.Name, e.TableName })
-            .ToListAsync();
-        var tableNameLookup = allEntities.ToDictionary(
-            e => e.Name,
-            e => e.TableName ?? Pluralize(e.Name),
-            StringComparer.OrdinalIgnoreCase);
-
-        var sb = new StringBuilder();
-        var tableName = entity.TableName ?? Pluralize(entity.Name);
-
-        sb.AppendLine($"IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = '{tableName}')");
-        sb.AppendLine("BEGIN");
-        sb.AppendLine($"    CREATE TABLE [{tableName}] (");
-        sb.AppendLine("        [Id] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWSEQUENTIALID() PRIMARY KEY,");
-        sb.AppendLine("        [CreatedAt] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),");
-
-        foreach (var col in entity.Columns.OrderBy(c => c.SortOrder))
-        {
-            var sqlType = MapToSqlType(col.DataType, col.MaxLength);
-            var nullable = col.IsRequired ? "NOT NULL" : "NULL";
-            var defaultClause = col.DefaultValue is not null ? $" DEFAULT {col.DefaultValue}" : string.Empty;
-            sb.AppendLine($"        [{col.Name}] {sqlType} {nullable}{defaultClause},");
-        }
-
-        foreach (var rel in entity.Relations)
-        {
-            sb.AppendLine($"        [{rel.ForeignKeyName}] UNIQUEIDENTIFIER NOT NULL,");
-        }
-
-        // Remove trailing comma from last column line
-        var sql = sb.ToString().TrimEnd();
-        var lastComma = sql.LastIndexOf(',');
-        if (lastComma >= 0)
-        {
-            sql = sql.Remove(lastComma, 1);
-        }
-
-        sb.Clear();
-        sb.AppendLine(sql);
-        sb.AppendLine("    );");
-
-        // Unique indexes
-        foreach (var col in entity.Columns.Where(c => c.IsUnique))
-        {
-            sb.AppendLine($"    CREATE UNIQUE INDEX [UX_{tableName}_{col.Name}] ON [{tableName}] ([{col.Name}]);");
-        }
-
-        // FK constraints — use the related entity's actual TableName, not a pluralized guess
-        foreach (var rel in entity.Relations)
-        {
-            var relatedTable = tableNameLookup.TryGetValue(rel.RelatedEntityName, out var t)
-                ? t
-                : Pluralize(rel.RelatedEntityName);
-            sb.AppendLine($"    ALTER TABLE [{tableName}] ADD CONSTRAINT [FK_{tableName}_{rel.ForeignKeyName}]");
-            sb.AppendLine($"        FOREIGN KEY ([{rel.ForeignKeyName}]) REFERENCES [{relatedTable}]([Id]);");
-        }
-
-        sb.AppendLine("END");
-
-        return sb.ToString();
-    }
-
-    public async Task ExecuteSqlAsync(string sql)
-    {
-        await _db.Database.ExecuteSqlRawAsync(sql);
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────────
@@ -255,19 +181,6 @@ public class EntityBuilderService : IEntityBuilderService
         e.Relations.Select(r => new EntityRelationDto(
             r.Id, r.RelatedEntityName, r.ForeignKeyName, r.NavigationPropertyName,
             r.DisplayColumn, (int)r.RelationType)).ToList());
-
-    private static string MapToSqlType(string dataType, int? maxLength) => dataType.ToLowerInvariant() switch
-    {
-        "string"   => maxLength.HasValue ? $"NVARCHAR({maxLength})" : "NVARCHAR(MAX)",
-        "int"      => "INT",
-        "long"     => "BIGINT",
-        "decimal"  => "DECIMAL(18,2)",
-        "double"   => "FLOAT",
-        "bool"     => "BIT",
-        "datetime" => "DATETIME2",
-        "guid"     => "UNIQUEIDENTIFIER",
-        _          => "NVARCHAR(255)"
-    };
 
     private static string Pluralize(string name)
     {

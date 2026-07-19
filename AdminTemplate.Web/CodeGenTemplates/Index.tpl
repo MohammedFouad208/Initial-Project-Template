@@ -1,16 +1,16 @@
 @{
-    ViewData["Title"] = "{{ entity.name }}";
+    ViewData["Title"] = Localizer["{{ entity.name }}_Index_Title"];
 }
 
 <div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
     <div>
-        <h1 class="mb-1">{{ entity.name }}</h1>
+        <h1 class="mb-1">@Localizer["{{ entity.name }}_Index_Title"]</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none" style="color:var(--primary)">Home</a>
+                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none" style="color:var(--primary)">@Localizer["Common_Home"]</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">{{ entity.name }}</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer["{{ entity.name }}_Index_Title"]</li>
             </ol>
         </nav>
     </div>
@@ -42,11 +42,11 @@ AppDataTable.init({
     searchFields: [
         {{- for col in entity.columns }}
         {{- if col.use_in_search }}
-        { key: '{{ col.name | string.slice 0 1 | string.downcase }}{{ col.name | string.slice 1 }}', label: '{{ col.name }}' },
+        { key: '{{ col.name | string.slice 0 1 | string.downcase }}{{ col.name | string.slice 1 }}', label: '@Localizer["{{ entity.name }}_Column_{{ col.name }}"]' },
         {{- end }}
         {{- end }}
         {{- for rel in entity.relations }}
-        { key: 'rel_{{ rel.navigation_property_name | string.slice 0 1 | string.downcase }}{{ rel.navigation_property_name | string.slice 1 }}', label: '{{ rel.related_entity_name }}', type: 'select', dataUrl: '@Url.Action("GetLookup{{ rel.related_entity_name }}", "{{ entity.name }}")' },
+        { key: 'rel_{{ rel.navigation_property_name | string.slice 0 1 | string.downcase }}{{ rel.navigation_property_name | string.slice 1 }}', label: '@Localizer["{{ entity.name }}_Rel_{{ rel.related_entity_name }}"]', type: 'select', dataUrl: '@Url.Action("GetLookup{{ rel.related_entity_name }}", "{{ entity.name }}")' },
         {{- end }}
     ],
     columns: [
@@ -54,7 +54,7 @@ AppDataTable.init({
         {{- if col.show_in_list }}
         {
             data: '{{ col.name | string.slice 0 1 | string.downcase }}{{ col.name | string.slice 1 }}',
-            title: '{{ col.name }}',
+            title: '@Localizer["{{ entity.name }}_Column_{{ col.name }}"]',
             {{- if !col.use_in_search }}
             searchable: false,
             {{- end }}
@@ -66,10 +66,10 @@ AppDataTable.init({
             }
             {{- else if col.data_type == "bool" }}
             render: function (val, type) {
-                if (type !== 'display') { return val ? 'Yes' : 'No'; }
+                if (type !== 'display') { return val ? '@Localizer["Common_Yes"]' : '@Localizer["Common_No"]'; }
                 return val
-                    ? '<span class="badge badge-soft badge-soft-success">Yes</span>'
-                    : '<span class="badge badge-soft badge-soft-secondary">No</span>';
+                    ? '<span class="badge badge-soft badge-soft-success">@Localizer["Common_Yes"]</span>'
+                    : '<span class="badge badge-soft badge-soft-secondary">@Localizer["Common_No"]</span>';
             }
             {{- end }}
         },
@@ -78,7 +78,7 @@ AppDataTable.init({
         {{- for rel in entity.relations }}
         {
             data: '{{ rel.navigation_property_name | string.slice 0 1 | string.downcase }}{{ rel.navigation_property_name | string.slice 1 }}{{ rel.display_column }}',
-            title: '{{ rel.related_entity_name }}',
+            title: '@Localizer["{{ entity.name }}_Rel_{{ rel.related_entity_name }}"]',
             orderable: false,
             searchable: false
         },

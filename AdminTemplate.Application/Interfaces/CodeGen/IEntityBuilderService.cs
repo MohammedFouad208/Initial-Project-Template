@@ -8,9 +8,6 @@ public interface IEntityBuilderService
     Task<EntityDefinitionDto?> GetByIdAsync(Guid id);
     Task<EntityDefinitionDto> CreateEntityAsync(CreateEntityDto dto);
     Task<EntityDefinitionDto?> UpdateEntityAsync(Guid id, CreateEntityDto dto);
-    Task DeleteEntityAsync(Guid id);
+    Task DeleteEntityAsync(Guid id, string projectRoot);
     Task MarkGeneratedAsync(Guid id);
-
-    Task<string> GenerateSqlAsync(EntityDefinitionDto entity);
-    Task ExecuteSqlAsync(string sql);
 }

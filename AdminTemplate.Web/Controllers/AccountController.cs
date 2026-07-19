@@ -2,10 +2,12 @@ using System.Threading.Tasks;
 using AdminTemplate.Application.Interfaces;
 using AdminTemplate.Application.Services;
 using AdminTemplate.Domain.Entities;
+
 using AdminTemplate.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace AdminTemplate.Web.Controllers
 {
@@ -14,13 +16,16 @@ namespace AdminTemplate.Web.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
         public AccountController(
             IAccountService accountService,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IStringLocalizer<SharedResource> localizer)
         {
             _accountService = accountService;
             _signInManager = signInManager;
+            _localizer = localizer;
         }
 
         [HttpGet]
@@ -46,13 +51,13 @@ namespace AdminTemplate.Web.Controllers
                         return LocalRedirect(returnUrl);
                     return RedirectToAction("Index", "Dashboard");
                 case AdminTemplate.Application.Services.LoginResult.Inactive:
-                    ModelState.AddModelError(string.Empty, "This account has been deactivated.");
+                    ModelState.AddModelError(string.Empty, _localizer["Login_Error_Inactive"]);
                     break;
                 case AdminTemplate.Application.Services.LoginResult.LockedOut:
-                    ModelState.AddModelError(string.Empty, "Your account has been temporarily locked. Please try again later.");
+                    ModelState.AddModelError(string.Empty, _localizer["Login_Error_LockedOut"]);
                     break;
                 default:
-                    ModelState.AddModelError(string.Empty, "Invalid email or password.");
+                    ModelState.AddModelError(string.Empty, _localizer["Login_Error_InvalidCredentials"]);
                     break;
             }
 
@@ -91,7 +96,7 @@ namespace AdminTemplate.Web.Controllers
                 return View(model);
             }
 
-            TempData["SuccessMessage"] = "Account created successfully. Please sign in.";
+            TempData["SuccessMessage"] = _localizer["Register_Success"];
             return RedirectToAction("Login");
         }
 
@@ -144,7 +149,7 @@ namespace AdminTemplate.Web.Controllers
                 return View(model);
             }
 
-            TempData["SuccessMessage"] = "Your password has been reset successfully. Please sign in.";
+            TempData["SuccessMessage"] = _localizer["ResetPassword_Success"];
             return RedirectToAction("Login");
         }
     }

@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- ══ COMMON ══════════════════════════════════════════════════════════════ -->
+
+  <data name="Common_Home" xml:space="preserve"><value>الرئيسية</value></data>
+  <data name="Common_Yes" xml:space="preserve"><value>نعم</value></data>
+  <data name="Common_No" xml:space="preserve"><value>لا</value></data>
+  <data name="Common_ID" xml:space="preserve"><value>المعرّف</value></data>
+  <data name="Common_CreatedAt" xml:space="preserve"><value>تاريخ الإنشاء</value></data>
+  <data name="Common_RecordInfo" xml:space="preserve"><value>معلومات السجل</value></data>
+  <data name="Common_Relations" xml:space="preserve"><value>العلاقات</value></data>
+  <data name="Common_Select" xml:space="preserve"><value>-- اختر --</value></data>
+  <data name="Common_Saving" xml:space="preserve"><value>جاري الحفظ…</value></data>
+  <data name="Common_Information" xml:space="preserve"><value>معلومات</value></data>
+  <data name="Common_Create" xml:space="preserve"><value>إنشاء</value></data>
+  <data name="Common_Edit" xml:space="preserve"><value>تعديل</value></data>
+  <data name="Common_Delete" xml:space="preserve"><value>حذف</value></data>
+  <data name="Common_Save" xml:space="preserve"><value>حفظ</value></data>
+  <data name="Common_SaveChanges" xml:space="preserve"><value>حفظ التغييرات</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>إلغاء</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>رجوع</value></data>
+  <data name="Common_Actions" xml:space="preserve"><value>الإجراءات</value></data>
+  <data name="Common_ConfirmDelete" xml:space="preserve"><value>تأكيد الحذف</value></data>
+  <data name="Common_ActionCannotBeUndone" xml:space="preserve"><value>لا يمكن التراجع عن هذا الإجراء.</value></data>
+
+  <data name="Common_Name" xml:space="preserve"><value>الاسم</value></data>
+  <data name="Common_Email" xml:space="preserve"><value>البريد الإلكتروني</value></data>
+  <data name="Common_Password" xml:space="preserve"><value>كلمة المرور</value></data>
+  <data name="Common_ConfirmPassword" xml:space="preserve"><value>تأكيد كلمة المرور</value></data>
+  <data name="Common_FullName" xml:space="preserve"><value>الاسم الكامل</value></data>
+  <data name="Common_Description" xml:space="preserve"><value>الوصف</value></data>
+  <data name="Common_Roles" xml:space="preserve"><value>الأدوار</value></data>
+  <data name="Common_Status" xml:space="preserve"><value>الحالة</value></data>
+  <data name="Common_Active" xml:space="preserve"><value>مفعّل</value></data>
+  <data name="Common_Inactive" xml:space="preserve"><value>غير مفعّل</value></data>
+  <data name="Common_Created" xml:space="preserve"><value>تاريخ الإنشاء</value></data>
+
+  <data name="Common_UnexpectedError" xml:space="preserve"><value>حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.</value></data>
+  <data name="Common_NoRecordsFound" xml:space="preserve"><value>لا توجد سجلات.</value></data>
+
+  <!-- ══ ACCOUNT ═════════════════════════════════════════════════════════════ -->
+
+  <data name="Login_Title" xml:space="preserve"><value>تسجيل الدخول</value></data>
+  <data name="Login_Heading" xml:space="preserve"><value>أهلاً بعودتك</value></data>
+  <data name="Login_Subtitle" xml:space="preserve"><value>سجّل دخولك للمتابعة</value></data>
+  <data name="Login_ForgotPassword" xml:space="preserve"><value>نسيت كلمة المرور؟</value></data>
+  <data name="Login_RememberMe" xml:space="preserve"><value>تذكّرني لمدة 30 يوماً</value></data>
+  <data name="Login_SignInButton" xml:space="preserve"><value>تسجيل الدخول</value></data>
+  <data name="Login_NoAccount" xml:space="preserve"><value>ليس لديك حساب؟</value></data>
+  <data name="Login_CreateOne" xml:space="preserve"><value>أنشئ حساباً</value></data>
+  <data name="Login_Error_Inactive" xml:space="preserve"><value>هذا الحساب موقوف.</value></data>
+  <data name="Login_Error_LockedOut" xml:space="preserve"><value>حسابك مقفل مؤقتاً. يرجى المحاولة لاحقاً.</value></data>
+  <data name="Login_Error_InvalidCredentials" xml:space="preserve"><value>البريد الإلكتروني أو كلمة المرور غير صحيحة.</value></data>
+
+  <data name="Register_Title" xml:space="preserve"><value>إنشاء حساب</value></data>
+  <data name="Register_Heading" xml:space="preserve"><value>أنشئ حسابك</value></data>
+  <data name="Register_Subtitle" xml:space="preserve"><value>أدخل بياناتك للبدء</value></data>
+  <data name="Register_SubmitButton" xml:space="preserve"><value>إنشاء الحساب</value></data>
+  <data name="Register_AlreadyHaveAccount" xml:space="preserve"><value>لديك حساب بالفعل؟</value></data>
+  <data name="Register_SignIn" xml:space="preserve"><value>تسجيل الدخول</value></data>
+  <data name="Register_Success" xml:space="preserve"><value>تم إنشاء الحساب بنجاح. يرجى تسجيل الدخول.</value></data>
+
+  <data name="ForgotPassword_Title" xml:space="preserve"><value>نسيت كلمة المرور</value></data>
+  <data name="ForgotPassword_Heading" xml:space="preserve"><value>نسيت كلمة المرور؟</value></data>
+  <data name="ForgotPassword_Subtitle" xml:space="preserve"><value>أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين.</value></data>
+  <data name="ForgotPassword_SubmitButton" xml:space="preserve"><value>إرسال رابط الإعادة</value></data>
+  <data name="ForgotPassword_BackToSignIn" xml:space="preserve"><value>العودة لتسجيل الدخول</value></data>
+
+  <data name="ForgotPasswordConfirmation_Title" xml:space="preserve"><value>تحقّق من بريدك</value></data>
+  <data name="ForgotPasswordConfirmation_Heading" xml:space="preserve"><value>تحقّق من بريدك الإلكتروني</value></data>
+  <data name="ForgotPasswordConfirmation_Subtitle" xml:space="preserve"><value>تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك. يرجى التحقق من البريد الوارد (ومجلد الرسائل غير المرغوب فيها).</value></data>
+  <data name="ForgotPasswordConfirmation_DevNote" xml:space="preserve"><value>في بيئة التطوير، يُطبع رابط الإعادة في مخرجات وحدة التحكم.</value></data>
+  <data name="ForgotPasswordConfirmation_BackToSignIn" xml:space="preserve"><value>العودة لتسجيل الدخول</value></data>
+
+  <data name="ResetPassword_Title" xml:space="preserve"><value>إعادة تعيين كلمة المرور</value></data>
+  <data name="ResetPassword_Heading" xml:space="preserve"><value>تعيين كلمة مرور جديدة</value></data>
+  <data name="ResetPassword_Subtitle" xml:space="preserve"><value>اختر كلمة مرور قوية لحسابك</value></data>
+  <data name="ResetPassword_NewPassword" xml:space="preserve"><value>كلمة المرور الجديدة</value></data>
+  <data name="ResetPassword_ConfirmNewPassword" xml:space="preserve"><value>تأكيد كلمة المرور الجديدة</value></data>
+  <data name="ResetPassword_SubmitButton" xml:space="preserve"><value>إعادة تعيين كلمة المرور</value></data>
+  <data name="ResetPassword_BackToSignIn" xml:space="preserve"><value>العودة لتسجيل الدخول</value></data>
+  <data name="ResetPassword_Success" xml:space="preserve"><value>تم إعادة تعيين كلمة المرور بنجاح. يرجى تسجيل الدخول.</value></data>
+
+  <!-- ══ ROLES ════════════════════════════════════════════════════════════════ -->
+
+  <data name="Roles_Index_Title" xml:space="preserve"><value>الأدوار</value></data>
+  <data name="Roles_Create_Title" xml:space="preserve"><value>إنشاء دور</value></data>
+  <data name="Roles_Edit_Title" xml:space="preserve"><value>تعديل الدور</value></data>
+  <data name="Roles_Column_RoleName" xml:space="preserve"><value>اسم الدور</value></data>
+  <data name="Roles_Column_Users" xml:space="preserve"><value>المستخدمون</value></data>
+  <data name="Roles_Column_Permissions" xml:space="preserve"><value>الصلاحيات</value></data>
+  <data name="Roles_Toast_Created" xml:space="preserve"><value>تم إنشاء الدور بنجاح.</value></data>
+  <data name="Roles_Toast_Updated" xml:space="preserve"><value>تم تحديث الدور بنجاح.</value></data>
+  <data name="Roles_Error_DeleteFailed" xml:space="preserve"><value>فشل حذف الدور.</value></data>
+  <data name="Roles_Label_ManagePermissions" xml:space="preserve"><value>إدارة الصلاحيات</value></data>
+  <data name="Roles_Label_DeleteConfirm" xml:space="preserve"><value>هل أنت متأكد من حذف الدور "{0}"؟ لا يمكن التراجع عن هذا الإجراء.</value></data>
+
+  <!-- ══ USERS ════════════════════════════════════════════════════════════════ -->
+
+  <data name="Users_Index_Title" xml:space="preserve"><value>المستخدمون</value></data>
+  <data name="Users_Create_Title" xml:space="preserve"><value>إنشاء مستخدم</value></data>
+  <data name="Users_Edit_Title" xml:space="preserve"><value>تعديل المستخدم</value></data>
+  <data name="Users_Column_Name" xml:space="preserve"><value>الاسم</value></data>
+  <data name="Users_Column_NoRoles" xml:space="preserve"><value>لا توجد أدوار</value></data>
+  <data name="Users_Toast_Created" xml:space="preserve"><value>تم إنشاء المستخدم بنجاح.</value></data>
+  <data name="Users_Toast_Updated" xml:space="preserve"><value>تم تحديث المستخدم بنجاح.</value></data>
+  <data name="Users_Error_DeleteFailed" xml:space="preserve"><value>فشل حذف المستخدم.</value></data>
+  <data name="Users_Error_UpdateStatusFailed" xml:space="preserve"><value>فشل تحديث حالة المستخدم.</value></data>
+  <data name="Users_Label_Activate" xml:space="preserve"><value>تفعيل</value></data>
+  <data name="Users_Label_Deactivate" xml:space="preserve"><value>إلغاء التفعيل</value></data>
+  <data name="Users_Label_DeleteConfirm" xml:space="preserve"><value>هل أنت متأكد من حذف المستخدم "{0}"؟ لا يمكن التراجع عن هذا الإجراء.</value></data>
+
+  <!-- ══ LOOKUPS ══════════════════════════════════════════════════════════════ -->
+
+  <data name="Lkp_Index_Title" xml:space="preserve"><value>جداول البيانات الثابتة</value></data>
+  <data name="Lkp_Column_NameAr" xml:space="preserve"><value>الاسم (عربي)</value></data>
+  <data name="Lkp_Column_NameEn" xml:space="preserve"><value>الاسم (إنجليزي)</value></data>
+  <data name="Lkp_Error_InvalidTableName" xml:space="preserve"><value>اسم الجدول غير صالح.</value></data>
+  <data name="Lkp_Error_NameRequired" xml:space="preserve"><value>الاسم مطلوب.</value></data>
+  <data name="Lkp_Error_TableNotFound" xml:space="preserve"><value>الجدول غير موجود.</value></data>
+  <data name="Lkp_Error_TableDoesNotExist" xml:space="preserve"><value>الجدول '{0}' غير موجود.</value></data>
+  <data name="Lkp_Label_SelectTable" xml:space="preserve"><value>اختر جدولاً</value></data>
+  <data name="Lkp_Label_NoTablesYet" xml:space="preserve"><value>لا توجد جداول بيانات ثابتة بعد.</value></data>
+  <data name="Lkp_Label_SelectTablePrompt" xml:space="preserve"><value>اختر جدولاً من القائمة لعرض بياناته.</value></data>
+  <data name="Lkp_Label_AddNew" xml:space="preserve"><value>إضافة جديد</value></data>
+  <data name="Lkp_Label_Tables" xml:space="preserve"><value>الجداول</value></data>
+  <data name="Lkp_Label_DeleteConfirm" xml:space="preserve"><value>هل أنت متأكد من حذف "{0}"؟ لا يمكن التراجع عن هذا الإجراء.</value></data>
+  <data name="Lkp_Label_ErrorSaving" xml:space="preserve"><value>خطأ أثناء حفظ السجل.</value></data>
+
+  <!-- ══ ROLE PERMISSIONS ═════════════════════════════════════════════════════ -->
+
+  <data name="RolePermissions_Index_Title" xml:space="preserve"><value>إدارة الصلاحيات</value></data>
+  <data name="RolePermissions_Index_Heading" xml:space="preserve"><value>إدارة صلاحيات: {0}</value></data>
+  <data name="RolePermissions_Column_ObjectFunction" xml:space="preserve"><value>الكائن / الوظيفة</value></data>
+  <data name="RolePermissions_Toast_Saved" xml:space="preserve"><value>تم حفظ الصلاحيات بنجاح.</value></data>
+  <data name="RolePermissions_Error_SaveFailed" xml:space="preserve"><value>حدث خطأ أثناء حفظ الصلاحيات.</value></data>
+  <data name="RolePermissions_Label_SavePermissions" xml:space="preserve"><value>حفظ الصلاحيات</value></data>
+  <data name="RolePermissions_Label_BackToRoles" xml:space="preserve"><value>العودة إلى الأدوار</value></data>
+
+  <!-- ══ ENTITY BUILDER ═══════════════════════════════════════════════════════ -->
+
+  <data name="EntityBuilder_Toast_EntityCreated" xml:space="preserve"><value>تم إنشاء الكيان '{0}' بنجاح.</value></data>
+  <data name="EntityBuilder_Toast_EntityUpdated" xml:space="preserve"><value>تم تحديث الكيان '{0}' بنجاح.</value></data>
+  <data name="EntityBuilder_Toast_EntityGenerated" xml:space="preserve"><value>تم توليد الكيان '{0}' بنجاح. تم إنشاء {1} ملف يرجى اعاده تشغيل التطبيق.</value></data>
+  <data name="EntityBuilder_Toast_EntityDeleted" xml:space="preserve"><value> تم حذف الكيان '{0}' وجميع الملفات المولّدة. يرجى اعاده تشغيل التطبيق.</value></data>
+  <data name="EntityBuilder_Toast_LkpCreated" xml:space="preserve"><value>تم إنشاء جدول البيانات الثابتة '{0}' بنجاح. يرجى اعاده تشغيل التطبيق.</value></data>
+  <data name="EntityBuilder_Toast_LkpDeleted" xml:space="preserve"><value>تم حذف جدول البيانات الثابتة '{0}' . يرجى اعاده تشغيل التطبيق.</value></data>
+  <data name="EntityBuilder_Error_EntityNotFound" xml:space="preserve"><value>الكيان غير موجود.</value></data>
+  <data name="EntityBuilder_Error_EntityNotFoundOrGenerated" xml:space="preserve"><value>الكيان غير موجود أو تم توليده مسبقاً — لا يمكن التعديل.</value></data>
+  <data name="EntityBuilder_Error_SqlError" xml:space="preserve"><value>خطأ SQL: {0}</value></data>
+  <data name="EntityBuilder_Error_BuildFailed" xml:space="preserve"><value>فشل البناء: {0}</value></data>
+  <data name="EntityBuilder_Error_DeletedButBuildFailed" xml:space="preserve"><value>تم حذف الكيان لكن فشل البناء: {0}</value></data>
+  <data name="EntityBuilder_Error_InvalidLkpName" xml:space="preserve"><value>اسم غير صالح. استخدم صيغة PascalCase بحروف وأرقام فقط.</value></data>
+  <data name="EntityBuilder_Error_InvalidTableName" xml:space="preserve"><value>اسم الجدول غير صالح.</value></data>
+
+  <!-- ══ RESOURCES MANAGEMENT ════════════════════════════════════════════════ -->
+
+  <data name="Resources_Index_Title" xml:space="preserve"><value>نصوص الموارد</value></data>
+  <data name="Resources_AddKey" xml:space="preserve"><value>إضافة مفتاح</value></data>
+  <data name="Resources_Search" xml:space="preserve"><value>بحث</value></data>
+  <data name="Resources_SearchPlaceholder" xml:space="preserve"><value>ابحث بالمفتاح أو القيمة…</value></data>
+  <data name="Resources_NoResults" xml:space="preserve"><value>لا توجد نصوص موارد.</value></data>
+  <data name="Resources_Column_Key" xml:space="preserve"><value>المفتاح</value></data>
+  <data name="Resources_Column_Value" xml:space="preserve"><value>القيمة</value></data>
+  <data name="Resources_KeyHint" xml:space="preserve"><value>استخدم صيغة prefix_Name، مثل Common_Save أو Roles_Title</value></data>
+  <data name="Resources_DeleteConfirm" xml:space="preserve"><value>هل أنت متأكد من حذف</value></data>
+  <data name="Resources_Error_KeyRequired" xml:space="preserve"><value>المفتاح مطلوب.</value></data>
+
+</root>

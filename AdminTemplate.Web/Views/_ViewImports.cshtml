@@ -1,5 +1,8 @@
 ﻿@using AdminTemplate.Web
 @using AdminTemplate.Web.Models
+
 @using AdminTemplate.Application.Services
+@using Microsoft.Extensions.Localization
 @inject AdminTemplate.Application.Interfaces.IPermissionService PermissionService
+@inject IStringLocalizer<SharedResource> Localizer
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

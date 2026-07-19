@@ -1,9 +1,8 @@
 @model AdminTemplate.Web.ViewModels.RolePermissions.RolePermissionsViewModel
 @{
     Layout = "_Layout";
-    ViewData["Title"] = "Manage Permissions";
+    ViewData["Title"] = Localizer["RolePermissions_Index_Title"];
 
-    // Collect all unique function names across all objects (preserving first-seen order)
     var allFunctions = Model.AllObjects
         .SelectMany(o => o.Functions)
         .Distinct()
@@ -20,61 +19,36 @@
         border-inline-end: 2px solid var(--border-color);
         min-width: 200px;
     }
-
-    .permission-matrix th {
-        white-space: nowrap;
-        text-align: center;
-        vertical-align: middle;
-    }
-
-    .permission-matrix td {
-        text-align: center;
-        vertical-align: middle;
-    }
-
-    .permission-matrix td:first-child {
-        text-align: start;
-    }
-
-    .col-toggle-label {
-        display: block;
-        font-size: 0.75rem;
-        color: var(--text-muted);
-        margin-block-start: 0.25rem;
-    }
+    .permission-matrix th { white-space: nowrap; text-align: center; vertical-align: middle; }
+    .permission-matrix td { text-align: center; vertical-align: middle; }
+    .permission-matrix td:first-child { text-align: start; }
+    .col-toggle-label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-block-start: 0.25rem; }
 </style>
 
 <div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
     <div>
-        <h1 class="mb-1">Manage Permissions: @Model.RoleName</h1>
+        <h1 class="mb-1">@string.Format(Localizer["RolePermissions_Index_Heading"], Model.RoleName)</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none breadcrumb-link">Home</a>
+                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none breadcrumb-link">@Localizer["Common_Home"]</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a asp-controller="Roles" asp-action="Index" class="text-decoration-none breadcrumb-link">Roles</a>
+                    <a asp-controller="Roles" asp-action="Index" class="text-decoration-none breadcrumb-link">@Localizer["Roles_Index_Title"]</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Manage Permissions</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer["RolePermissions_Index_Title"]</li>
             </ol>
         </nav>
     </div>
 </div>
 
-@if (TempData["Success"] != null)
+@if (TempData["ToastMessage"] != null)
 {
-    <div class="alert alert-success alert-dismissible fade show" role="alert"
-         style="border-inline-start:4px solid var(--success)">
-        <i class="fa-solid fa-circle-check me-2"></i>@TempData["Success"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
-
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert"
-         style="border-inline-start:4px solid var(--danger)">
-        <i class="fa-solid fa-circle-xmark me-2"></i>@TempData["Error"]
+    var toastType = TempData["ToastType"]?.ToString() == "danger" ? "danger" : "success";
+    var icon = toastType == "danger" ? "fa-circle-xmark" : "fa-circle-check";
+    <div class="alert alert-@toastType alert-dismissible fade show" role="alert"
+         style="border-inline-start:4px solid var(--@toastType)">
+        <i class="fa-solid @icon me-2"></i>@TempData["ToastMessage"]
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
@@ -89,7 +63,7 @@
                 <table class="table table-bordered permission-matrix mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th scope="col">Object / Function</th>
+                            <th scope="col">@Localizer["RolePermissions_Column_ObjectFunction"]</th>
                             @foreach (var func in allFunctions)
                             {
                                 <th scope="col">
@@ -109,12 +83,8 @@
                                 <td>
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <span class="fw-medium">@obj.DisplayName</span>
-                                        <button type="button"
-                                                class="btn btn-outline-secondary btn-sm check-all-btn"
-                                                data-object="@obj.Name">All</button>
-                                        <button type="button"
-                                                class="btn btn-outline-secondary btn-sm check-none-btn"
-                                                data-object="@obj.Name">None</button>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm check-all-btn" data-object="@obj.Name">All</button>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm check-none-btn" data-object="@obj.Name">None</button>
                                     </div>
                                 </td>
                                 @foreach (var func in allFunctions)
@@ -147,11 +117,11 @@
     </div>
 
     <div class="mt-3">
-        <button type="submit" class="btn btn-primary btn-sm">
-            <i class="fa-solid fa-floppy-disk me-1"></i>Save Permissions
+        <button type="submit" class="btn btn-primary btn-md">
+            <i class="fa-solid fa-floppy-disk me-1"></i>@Localizer["RolePermissions_Label_SavePermissions"]
         </button>
-        <a asp-controller="Roles" asp-action="Index" class="btn btn-outline-secondary btn-sm ms-2">
-            <i class="fa-solid fa-arrow-left me-1"></i>Back to Roles
+        <a asp-controller="Roles" asp-action="Index" class="btn btn-outline-secondary btn-md ms-2">
+            <i class="fa-solid fa-arrow-left me-1"></i>@Localizer["RolePermissions_Label_BackToRoles"]
         </a>
     </div>
 </form>
@@ -160,7 +130,6 @@
 <partial name="_ValidationScriptsPartial" />
 <script>
 (function () {
-    // Row: Check All
     document.querySelectorAll('.check-all-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
             var obj = btn.getAttribute('data-object');
@@ -168,8 +137,6 @@
                 .forEach(function (cb) { cb.checked = true; });
         });
     });
-
-    // Row: Check None
     document.querySelectorAll('.check-none-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
             var obj = btn.getAttribute('data-object');
@@ -177,8 +144,6 @@
                 .forEach(function (cb) { cb.checked = false; });
         });
     });
-
-    // Column: Toggle all cells in a function column
     document.querySelectorAll('.col-toggle').forEach(function (toggle) {
         toggle.addEventListener('change', function () {
             var func    = toggle.getAttribute('data-func');

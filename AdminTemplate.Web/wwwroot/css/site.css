@@ -24,9 +24,14 @@
   --border-radius: 0.5rem;
   --border-radius-lg: 0.75rem;
   --border-radius-xl: 1rem;
+  --input-bg: #ffffff;
+  --input-bg-hover: #f8fafc;
+  --input-border: #cbd5e1;
+  --input-placeholder: #94a3b8;
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
   --shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
   --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+  --input-shadow-focus: 0 0 0 4px rgba(var(--primary-rgb), 0.12);
   --sidebar-width: 260px;
   --sidebar-collapsed-width: 72px;
   --topnav-height: 64px;
@@ -387,6 +392,13 @@ body {
   overflow: hidden;
 }
 
+.btn-md {
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+}
+
 .btn-primary {
   background: var(--primary);
   border-color: var(--primary);
@@ -444,23 +456,127 @@ body {
    Forms
    ============================================================ */
 .form-control, .form-select {
-  border-color: var(--border-color);
+  min-height: 2.75rem;
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
   border-radius: var(--border-radius);
   font-size: 0.9375rem;
-  padding: 0.5625rem 0.875rem;
+  padding: 0.625rem 0.875rem;
   color: var(--text-primary);
-  transition: border-color var(--transition), box-shadow var(--transition);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.form-control:hover, .form-select:hover {
+  background-color: var(--input-bg-hover);
+  border-color: #94a3b8;
 }
 
 .form-control:focus, .form-select:focus {
+  background-color: var(--input-bg);
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+  box-shadow: var(--input-shadow-focus);
   color: var(--text-primary);
 }
 
-.form-control.is-valid { border-color: var(--success); }
+.form-control::placeholder {
+  color: var(--input-placeholder);
+}
+
+textarea.form-control {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.form-control-sm, .form-select-sm {
+  min-height: 2.125rem;
+  padding: 0.375rem 0.625rem;
+  font-size: 0.8125rem;
+  border-radius: var(--border-radius-sm);
+}
+
+.form-control-color {
+  width: 3rem;
+  min-height: 2.75rem;
+  padding: 0.25rem;
+}
+
+.input-group .form-control, .input-group .form-select {
+  box-shadow: none;
+}
+
+.field-icon-wrap {
+  position: relative;
+}
+
+.field-icon-wrap .form-control {
+  padding-inline-start: 2.75rem;
+}
+
+.field-icon-wrap .field-icon {
+  position: absolute;
+  inset-inline-start: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+  font-size: 0.9375rem;
+  z-index: 2;
+}
+
+.form-check-input {
+  border-color: var(--input-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check-input:focus {
+  border-color: var(--primary);
+  box-shadow: var(--input-shadow-focus);
+}
+
+.form-check-input:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.select2-container--bootstrap-5 .select2-selection {
+  min-height: 2.75rem;
+  border-color: var(--input-border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.select2-container--bootstrap-5 .select2-selection:hover {
+  background-color: var(--input-bg-hover);
+  border-color: #94a3b8;
+}
+
+.select2-container--bootstrap-5.select2-container--focus .select2-selection,
+.select2-container--bootstrap-5.select2-container--open .select2-selection {
+  border-color: var(--primary);
+  box-shadow: var(--input-shadow-focus);
+}
+
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice {
+  border: none;
+  border-radius: 999px;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.form-control:disabled, .form-select:disabled,
+.form-control[readonly] {
+  background-color: #f1f5f9;
+  color: var(--text-secondary);
+  box-shadow: none;
+}
+
+.form-control.is-valid, .form-select.is-valid { border-color: var(--success); }
 .form-control.is-valid:focus { box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15); }
-.form-control.is-invalid { border-color: var(--danger); }
+.form-control.is-invalid, .form-select.is-invalid { border-color: var(--danger); }
 .form-control.is-invalid:focus { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15); }
 
 .form-label {

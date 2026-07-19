@@ -1,5 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using AdminTemplate.Application.DTOs.CodeGen;
 using AdminTemplate.Application.Interfaces.CodeGen;
 using Scriban;
@@ -31,6 +33,22 @@ public class CodeGeneratorService : ICodeGeneratorService
             var modelPath = Path.Combine(projectRootPath, "AdminTemplate.Domain", "Entities", $"{entity.Name}.cs");
             await WriteProtectedAsync(modelPath, modelOutput);
             generatedFiles.Add(modelPath);
+
+            // Application service interface
+            var interfacesDir = Path.Combine(projectRootPath, "AdminTemplate.Application", "Interfaces");
+            Directory.CreateDirectory(interfacesDir);
+            var iServiceOutput = await RenderTemplateAsync("IService.tpl", model);
+            var iServicePath = Path.Combine(interfacesDir, $"I{entity.Name}Service.cs");
+            await WriteProtectedAsync(iServicePath, iServiceOutput);
+            generatedFiles.Add(iServicePath);
+
+            // Infrastructure service implementation
+            var servicesDir = Path.Combine(projectRootPath, "AdminTemplate.Infrastructure", "Services");
+            Directory.CreateDirectory(servicesDir);
+            var serviceOutput = await RenderTemplateAsync("Service.tpl", model);
+            var servicePath = Path.Combine(servicesDir, $"{entity.Name}Service.cs");
+            await WriteProtectedAsync(servicePath, serviceOutput);
+            generatedFiles.Add(servicePath);
 
             // Controller
             var controllerOutput = await RenderTemplateAsync("Controller.tpl", model);
@@ -72,6 +90,10 @@ public class CodeGeneratorService : ICodeGeneratorService
             var dbContextPath = Path.Combine(projectRootPath, "AdminTemplate.Infrastructure", "Data", "ApplicationDbContext.cs");
             AddDbSetToContext(dbContextPath, entity.Name);
 
+            // DI registration
+            var extensionsPath = Path.Combine(projectRootPath, "AdminTemplate.Infrastructure", "Extensions", "InfrastructureServiceExtensions.cs");
+            AddServiceRegistration(extensionsPath, entity.Name);
+
             // Objects.json — add sidebar entry
             var objectsJsonPath = Path.Combine(projectRootPath, "AdminTemplate.Web", "Config", "Objects.json");
             AddEntryToObjectsJson(objectsJsonPath, entity.Name);
@@ -79,6 +101,11 @@ public class CodeGeneratorService : ICodeGeneratorService
             // permissions.json — register entity so it appears in role-permission management
             var permissionsJsonPath = Path.Combine(projectRootPath, "AdminTemplate.Web", "Config", "permissions.json");
             AddEntryToPermissionsJson(permissionsJsonPath, entity.Name);
+
+            // Resource files — add labels for views
+            var resourcesDir = Path.Combine(projectRootPath, "AdminTemplate.Web", "Resources");
+            AddEntityResourceKeys(Path.Combine(resourcesDir, "SharedResource.resx"), entity, arabic: false);
+            AddEntityResourceKeys(Path.Combine(resourcesDir, "SharedResource.ar.resx"), entity, arabic: true);
 
             return new GenerationResult(true, null, generatedFiles);
         }
@@ -93,9 +120,11 @@ public class CodeGeneratorService : ICodeGeneratorService
         // Generated source files
         var filesToDelete = new[]
         {
-            Path.Combine(projectRootPath, "AdminTemplate.Domain",    "Entities",    $"{entity.Name}.cs"),
-            Path.Combine(projectRootPath, "AdminTemplate.Web",       "Controllers", $"{entity.Name}Controller.cs"),
-            Path.Combine(projectRootPath, "AdminTemplate.Web",       "Models", "ViewModels", $"{entity.Name}DetailsViewModel.cs"),
+            Path.Combine(projectRootPath, "AdminTemplate.Domain",          "Entities",    $"{entity.Name}.cs"),
+            Path.Combine(projectRootPath, "AdminTemplate.Application",     "Interfaces",  $"I{entity.Name}Service.cs"),
+            Path.Combine(projectRootPath, "AdminTemplate.Infrastructure",  "Services",    $"{entity.Name}Service.cs"),
+            Path.Combine(projectRootPath, "AdminTemplate.Web",             "Controllers", $"{entity.Name}Controller.cs"),
+            Path.Combine(projectRootPath, "AdminTemplate.Web",             "Models", "ViewModels", $"{entity.Name}DetailsViewModel.cs"),
         };
 
         foreach (var file in filesToDelete)
@@ -110,10 +139,16 @@ public class CodeGeneratorService : ICodeGeneratorService
         var dbContextPath   = Path.Combine(projectRootPath, "AdminTemplate.Infrastructure", "Data", "ApplicationDbContext.cs");
         var objectsJsonPath = Path.Combine(projectRootPath, "AdminTemplate.Web", "Config", "Objects.json");
         var permissionsPath = Path.Combine(projectRootPath, "AdminTemplate.Web", "Config", "permissions.json");
+        var extensionsPath  = Path.Combine(projectRootPath, "AdminTemplate.Infrastructure", "Extensions", "InfrastructureServiceExtensions.cs");
 
         RemoveDbSetFromContext(dbContextPath, entity.Name);
         RemoveEntryFromJson(objectsJsonPath, "Objects",           entity.Name);
         RemoveEntryFromJson(permissionsPath, "PermissionObjects", entity.Name);
+        RemoveServiceRegistration(extensionsPath, entity.Name);
+
+        var resourcesDir = Path.Combine(projectRootPath, "AdminTemplate.Web", "Resources");
+        RemoveEntityResourceKeys(Path.Combine(resourcesDir, "SharedResource.resx"), entity.Name);
+        RemoveEntityResourceKeys(Path.Combine(resourcesDir, "SharedResource.ar.resx"), entity.Name);
 
         return Task.CompletedTask;
     }
@@ -343,6 +378,143 @@ public class CodeGeneratorService : ICodeGeneratorService
 
         var options = new JsonSerializerOptions { WriteIndented = true };
         File.WriteAllText(jsonPath, root.ToJsonString(options));
+    }
+
+    private static void AddServiceRegistration(string extensionsPath, string entityName)
+    {
+        if (!File.Exists(extensionsPath)) return;
+
+        var source = File.ReadAllText(extensionsPath);
+        var registration = $"        services.AddScoped<I{entityName}Service, {entityName}Service>();";
+
+        if (source.Contains($"I{entityName}Service")) return;
+
+        // Insert after the last existing AddScoped call
+        var lastScoped = source.LastIndexOf("services.AddScoped<");
+        if (lastScoped < 0) return;
+
+        var lineEnd = source.IndexOf('\n', lastScoped);
+        if (lineEnd < 0) return;
+
+        source = source.Insert(lineEnd + 1, registration + "\n");
+        File.WriteAllText(extensionsPath, source);
+    }
+
+    private static void RemoveServiceRegistration(string extensionsPath, string entityName)
+    {
+        if (!File.Exists(extensionsPath)) return;
+
+        var lines = File.ReadAllLines(extensionsPath).ToList();
+        lines.RemoveAll(l => l.Contains($"I{entityName}Service"));
+        File.WriteAllLines(extensionsPath, lines);
+    }
+
+    // ── Resource file helpers ────────────────────────────────────────────────
+
+    private static void AddEntityResourceKeys(string resxPath, EntityDefinitionDto entity, bool arabic)
+    {
+        if (!File.Exists(resxPath)) return;
+
+        var doc = XDocument.Load(resxPath, LoadOptions.PreserveWhitespace);
+        var root = doc.Root;
+        if (root is null) return;
+
+        var existingKeys = new HashSet<string>(
+            root.Elements("data")
+                .Select(d => (string?)d.Attribute("name") ?? string.Empty),
+            StringComparer.Ordinal);
+
+        var entries = BuildEntityResourceEntries(entity, arabic);
+        var added = false;
+
+        foreach (var (key, value) in entries)
+        {
+            if (existingKeys.Contains(key)) continue;
+
+            var dataEl = new XElement("data",
+                new XAttribute("name", key),
+                new XAttribute(XNamespace.Xml + "space", "preserve"),
+                new XElement("value", value));
+
+            root.Add(dataEl);
+            added = true;
+        }
+
+        if (added)
+        {
+            doc.Save(resxPath);
+        }
+    }
+
+    private static void RemoveEntityResourceKeys(string resxPath, string entityName)
+    {
+        if (!File.Exists(resxPath)) return;
+
+        var doc = XDocument.Load(resxPath, LoadOptions.PreserveWhitespace);
+        var root = doc.Root;
+        if (root is null) return;
+
+        var prefix = entityName + "_";
+        var toRemove = root.Elements("data")
+            .Where(d => ((string?)d.Attribute("name") ?? string.Empty)
+                .StartsWith(prefix, StringComparison.Ordinal))
+            .ToList();
+
+        if (toRemove.Count == 0) return;
+
+        foreach (var el in toRemove) el.Remove();
+        doc.Save(resxPath);
+    }
+
+    private static IEnumerable<(string Key, string Value)> BuildEntityResourceEntries(EntityDefinitionDto entity, bool arabic)
+    {
+        var name      = entity.Name;
+        var plural    = Pluralize(name);
+        var spaced    = SplitPascal(name);
+        var pluralSp  = SplitPascal(plural);
+
+        if (arabic)
+        {
+            // Arabic placeholders mirror English label so translators can fill in later.
+            yield return ($"{name}_Index_Title",   pluralSp);
+            yield return ($"{name}_Create_Title",  $"إنشاء {spaced}");
+            yield return ($"{name}_Edit_Title",    $"تعديل {spaced}");
+            yield return ($"{name}_Details_Title", $"تفاصيل {spaced}");
+            yield return ($"{name}_DeleteConfirm", $"هل أنت متأكد من حذف هذا {spaced}؟ لا يمكن التراجع عن هذا الإجراء.");
+        }
+        else
+        {
+            yield return ($"{name}_Index_Title",   pluralSp);
+            yield return ($"{name}_Create_Title",  $"Create {spaced}");
+            yield return ($"{name}_Edit_Title",    $"Edit {spaced}");
+            yield return ($"{name}_Details_Title", $"{spaced} Details");
+            yield return ($"{name}_DeleteConfirm", $"Are you sure you want to delete this {spaced}? This action cannot be undone.");
+        }
+
+        var colNames = entity.Columns
+            .Where(c => c.ShowInList || c.ShowInForm || c.UseInSearch)
+            .Select(c => c.Name)
+            .Distinct(StringComparer.Ordinal);
+
+        foreach (var col in colNames)
+        {
+            yield return ($"{name}_Column_{col}", SplitPascal(col));
+        }
+
+        var relNames = entity.Relations
+            .Select(r => r.RelatedEntityName)
+            .Distinct(StringComparer.Ordinal);
+
+        foreach (var rel in relNames)
+        {
+            yield return ($"{name}_Rel_{rel}", SplitPascal(rel));
+        }
+    }
+
+    private static string SplitPascal(string value)
+    {
+        if (string.IsNullOrEmpty(value)) return value;
+        return Regex.Replace(value, "(?<!^)([A-Z])", " $1");
     }
 
     // Only writes if file doesn't already have a [GeneratedCode] guard meaning it was hand-edited

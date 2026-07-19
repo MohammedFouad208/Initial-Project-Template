@@ -2,7 +2,8 @@
     Layout = null;
 }
 <!doctype html>
-<html lang="en">
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName"
+      dir="@(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ar" ? "rtl" : "ltr")">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -219,13 +220,6 @@
             .auth-form-inner { padding: 2rem 1.25rem; }
         }
     </style>
-    <script>
-        (function () {
-            var d = localStorage.getItem("textDirection") || "ltr";
-            document.documentElement.setAttribute("dir", d);
-            document.documentElement.setAttribute("lang", d === "rtl" ? "ar" : "en");
-        }());
-    </script>
 </head>
 <body style="background:#f1f5f9">
 
@@ -250,7 +244,36 @@
 
         <!-- Form panel -->
         <div class="auth-form-panel">
-            <button class="auth-dir-btn" id="authDirBtn" type="button">RTL</button>
+            @{
+                var isAr = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ar";
+            }
+            <div style="position:absolute;top:1.125rem;inset-inline-end:1.125rem;z-index:10">
+                <div class="dropdown">
+                    <button class="auth-dir-btn dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false"
+                            style="min-width:60px">
+                        <i class="fa-solid fa-globe me-1" style="font-size:.65rem"></i>@(isAr ? "AR" : "EN")
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" style="min-width:120px;font-size:.875rem">
+                        <li>
+                            <form method="post" asp-controller="Language" asp-action="Set">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="culture" value="en" />
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                <button type="submit" class="dropdown-item @(!isAr ? "active" : "")">🇬🇧 English</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form method="post" asp-controller="Language" asp-action="Set">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="culture" value="ar" />
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                <button type="submit" class="dropdown-item @(isAr ? "active" : "")">🇸🇦 العربية</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="auth-form-inner">
                 @RenderBody()
             </div>
@@ -260,29 +283,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        (function () {
-            var btn = document.getElementById("authDirBtn");
-            if (!btn) return;
-
-            function updateBtn() {
-                var dir = document.documentElement.getAttribute("dir") || "ltr";
-                btn.textContent = dir === "rtl" ? "LTR" : "RTL";
-                btn.title       = dir === "rtl" ? "Switch to Left-to-Right" : "Switch to Right-to-Left";
-            }
-
-            updateBtn();
-
-            btn.addEventListener("click", function () {
-                var current = document.documentElement.getAttribute("dir") || "ltr";
-                var next   = current === "rtl" ? "ltr" : "rtl";
-                document.documentElement.setAttribute("dir", next);
-                document.documentElement.setAttribute("lang", next === "rtl" ? "ar" : "en");
-                localStorage.setItem("textDirection", next);
-                updateBtn();
-            });
-        }());
-
-        // Form loading
+        // Form loading state
         document.querySelectorAll("form").forEach(function (form) {
             form.addEventListener("submit", function () {
                 var btn = form.querySelector('[type="submit"]');

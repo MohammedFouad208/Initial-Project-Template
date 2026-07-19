@@ -1,29 +1,20 @@
 @{
-    ViewData["Title"] = "Roles";
+    ViewData["Title"] = Localizer["Roles_Index_Title"];
 }
 
 <div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
     <div>
-        <h1 class="mb-1">Roles</h1>
+        <h1 class="mb-1">@Localizer["Roles_Index_Title"]</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none breadcrumb-link">Home</a>
+                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none breadcrumb-link">@Localizer["Common_Home"]</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Roles</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer["Roles_Index_Title"]</li>
             </ol>
         </nav>
     </div>
 </div>
-
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert"
-         style="border-inline-start:4px solid var(--success)">
-        <i class="fa-solid fa-circle-check me-2"></i>@TempData["Success"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
 
 <div class="card table-card">
     <div class="card-body">
@@ -45,63 +36,45 @@ rolesTable = AppDataTable.init({
     tableId: 'rolesTable',
     ajaxUrl: '@Url.Action("GetData", "Roles")',
     columns: [
-        { data: 'name', title: 'Role Name' },
-        {
-            data: 'description',
-            title: 'Description',
+        { data: 'name',        title: '@Localizer["Roles_Column_RoleName"]' },
+        { data: 'description', title: '@Localizer["Common_Description"]',
             render: function (val, type) {
                 if (type !== 'display') { return val || ''; }
                 return val ? val : '<span class="text-muted fst-italic">—</span>';
             }
         },
-        {
-            data: 'userCount',
-            title: 'Users',
-            orderable: false,
+        { data: 'userCount', title: '@Localizer["Roles_Column_Users"]', orderable: false,
             render: function (val, type) {
                 if (type !== 'display') { return val; }
                 return '<span class="badge badge-soft badge-soft-primary">' + val + '</span>';
             }
         },
-        {
-            data: 'permissionCount',
-            title: 'Permissions',
-            orderable: false,
+        { data: 'permissionCount', title: '@Localizer["Roles_Column_Permissions"]', orderable: false,
             render: function (val, type) {
                 if (type !== 'display') { return val; }
                 return '<span class="badge badge-soft badge-soft-secondary">' + val + '</span>';
             }
         },
-        {
-            data: 'createdAt',
-            title: 'Created',
+        { data: 'createdAt', title: '@Localizer["Common_Created"]',
             render: function (val, type) {
                 if (!val) { return '—'; }
                 if (type !== 'display') { return val; }
                 return new Date(val).toLocaleDateString();
             }
         },
-        {
-            data: null,
-            title: 'Actions',
-            orderable: false,
-            searchable: false,
+        { data: null, title: '@Localizer["Common_Actions"]', orderable: false, searchable: false,
             render: function (data, type, row) {
                 var html = '<div class="d-flex gap-1">';
                 if (_canManagePermissions) {
-                    html += '<a href="/RolePermissions/' + row.id + '" ' +
-                            'class="btn btn-outline-primary btn-sm" title="Manage Permissions">' +
-                            '<i class="fa fa-key"></i></a>';
+                    html += '<a href="/RolePermissions/' + row.id + '" class="btn btn-outline-primary btn-sm" title="@Localizer["Roles_Label_ManagePermissions"]"><i class="fa fa-key"></i></a>';
                 }
                 if (_canUpdate) {
-                    html += '<a href="@Url.Action("Edit", "Roles")/' + row.id + '" ' +
-                            'class="btn btn-outline-secondary btn-sm" title="Edit">' +
-                            '<i class="fa-solid fa-pen-to-square"></i></a>';
+                    html += '<a href="@Url.Action("Edit", "Roles")/' + row.id + '" class="btn btn-outline-secondary btn-sm" title="@Localizer["Common_Edit"]"><i class="fa-solid fa-pen-to-square"></i></a>';
                 }
                 if (_canDelete) {
                     html += '<button type="button" class="btn btn-outline-danger btn-sm dt-role-delete-btn" ' +
                             'data-delete-url="@Url.Action("Delete", "Roles")/' + row.id + '" ' +
-                            'data-record-label="' + (row.name || row.id) + '" title="Delete">' +
+                            'data-record-label="' + (row.name || row.id) + '" title="@Localizer["Common_Delete"]">' +
                             '<i class="fa-solid fa-trash"></i></button>';
                 }
                 html += '</div>';
@@ -118,19 +91,14 @@ rolesTable = AppDataTable.init({
     objectName: 'Role'
 });
 
-// ── Delete modal wiring ──────────────────────────────────────────────────────
 $('#rolesTable').on('click', '.dt-role-delete-btn', function () {
     var $btn      = $(this);
     var deleteUrl = $btn.data('delete-url');
     var label     = $btn.data('record-label');
     var $modal    = $('#deleteConfirmModal');
-
-    $modal.find('#deleteConfirmBody')
-          .text('Are you sure you want to delete the role "' + label + '"? This action cannot be undone.');
-
-    // Clear any previous error alert in the modal
+    var msgTpl    = '@Html.Raw(Localizer["Roles_Label_DeleteConfirm"].Value.Replace("'", "\\'"))';
+    $modal.find('#deleteConfirmBody').text(msgTpl.replace('{0}', label));
     $modal.find('.dt-delete-error').remove();
-
     $modal.find('#deleteConfirmBtn').data('delete-url', deleteUrl);
     bootstrap.Modal.getOrCreateInstance($modal[0]).show();
 });
@@ -139,35 +107,27 @@ $(document).on('click', '#deleteConfirmBtn', function () {
     var deleteUrl = $(this).data('delete-url');
     var $modal    = $('#deleteConfirmModal');
     var token     = $('input[name="__RequestVerificationToken"]').val();
-
     if (!token) { console.warn('CSRF token missing'); return; }
 
-    fetch(deleteUrl, {
-        method:  'POST',
-        headers: { 'RequestVerificationToken': token }
-    })
+    fetch(deleteUrl, { method: 'POST', headers: { 'RequestVerificationToken': token } })
     .then(function (res) { return res.json(); })
     .then(function (result) {
         if (result.success) {
             bootstrap.Modal.getOrCreateInstance($modal[0]).hide();
             rolesTable.ajax.reload(null, false);
         } else {
-            // Show error inside modal rather than closing it
             $modal.find('.dt-delete-error').remove();
-            var $alert = $('<div class="alert alert-danger dt-delete-error mt-3 mb-0" ' +
-                           'style="border-inline-start:4px solid var(--danger)">' +
-                           '<i class="fa-solid fa-circle-exclamation me-2"></i>' +
-                           (result.message || 'Failed to delete role.') +
-                           '</div>');
-            $modal.find('.modal-body').append($alert);
+            $modal.find('.modal-body').append(
+                '<div class="alert alert-danger dt-delete-error mt-3 mb-0" style="border-inline-start:4px solid var(--danger)">' +
+                '<i class="fa-solid fa-circle-exclamation me-2"></i>' +
+                (result.message || '@Localizer["Roles_Error_DeleteFailed"]') + '</div>');
         }
     })
     .catch(function () {
         $modal.find('.dt-delete-error').remove();
-        var $alert = $('<div class="alert alert-danger dt-delete-error mt-3 mb-0" ' +
-                       'style="border-inline-start:4px solid var(--danger)">' +
-                       'An unexpected error occurred. Please try again.</div>');
-        $modal.find('.modal-body').append($alert);
+        $modal.find('.modal-body').append(
+            '<div class="alert alert-danger dt-delete-error mt-3 mb-0" style="border-inline-start:4px solid var(--danger)">' +
+            '@Localizer["Common_UnexpectedError"]</div>');
     });
 });
 </script>

@@ -3,11 +3,13 @@ using AdminTemplate.Application.Interfaces;
 using AdminTemplate.Application.Providers;
 using AdminTemplate.Infrastructure.Data;
 using AdminTemplate.Web.Filters;
-using AdminTemplate.Web.Models;
+using AdminTemplate.Application.Common.DataTable;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace AdminTemplate.Web.Controllers;
 
@@ -18,12 +20,14 @@ public class LkpController : Controller
     private readonly ApplicationDbContext _db;
     private readonly ILkpProvider _lkpProvider;
     private readonly IPermissionService _permissionService;
+    private readonly IStringLocalizer<SharedResource> _localizer;
 
-    public LkpController(ApplicationDbContext db, ILkpProvider lkpProvider, IPermissionService permissionService)
+    public LkpController(ApplicationDbContext db, ILkpProvider lkpProvider, IPermissionService permissionService, IStringLocalizer<SharedResource> localizer)
     {
-        _db             = db;
-        _lkpProvider    = lkpProvider;
+        _db                = db;
+        _lkpProvider       = lkpProvider;
         _permissionService = permissionService;
+        _localizer         = localizer;
     }
 
     // ── Index ────────────────────────────────────────────────────────────────
@@ -45,7 +49,7 @@ public class LkpController : Controller
     public async Task<IActionResult> GetData([FromQuery] DataTableRequest request, [FromQuery] string table)
     {
         if (!IsValidTableName(table))
-            return BadRequest("Invalid table name.");
+            return BadRequest(_localizer["Lkp_Error_InvalidTableName"].Value);
 
         if (!TableExists(table))
             return Json(new DataTableResponse<object> { Draw = request.Draw, RecordsTotal = 0, RecordsFiltered = 0, Data = [] });
@@ -109,13 +113,13 @@ public class LkpController : Controller
     public async Task<IActionResult> Create([FromForm] string table, [FromForm] string name, [FromForm] string nameEn, [FromForm] bool isActive = true)
     {
         if (!IsValidTableName(table))
-            return Json(new { success = false, message = "Invalid table name." });
+            return Json(new { success = false, message = _localizer["Lkp_Error_InvalidTableName"].Value });
 
         if (string.IsNullOrWhiteSpace(name))
-            return Json(new { success = false, message = "Name is required." });
+            return Json(new { success = false, message = _localizer["Lkp_Error_NameRequired"].Value });
 
         if (!TableExists(table))
-            return Json(new { success = false, message = $"Table '{table}' does not exist." });
+            return Json(new { success = false, message = string.Format(_localizer["Lkp_Error_TableDoesNotExist"], table) });
 
         var id  = Guid.NewGuid();
         var sql = $"INSERT INTO [{table}] (Id, Name, NameEn, IsActive, CreatedAt) VALUES (@Id, @Name, @NameEn, @IsActive, @CreatedAt)";
@@ -161,13 +165,13 @@ public class LkpController : Controller
     public async Task<IActionResult> Edit([FromForm] string table, [FromForm] Guid id, [FromForm] string name, [FromForm] string nameEn, [FromForm] bool isActive = true)
     {
         if (!IsValidTableName(table))
-            return Json(new { success = false, message = "Invalid table name." });
+            return Json(new { success = false, message = _localizer["Lkp_Error_InvalidTableName"].Value });
 
         if (string.IsNullOrWhiteSpace(name))
-            return Json(new { success = false, message = "Name is required." });
+            return Json(new { success = false, message = _localizer["Lkp_Error_NameRequired"].Value });
 
         if (!TableExists(table))
-            return Json(new { success = false, message = $"Table '{table}' does not exist." });
+            return Json(new { success = false, message = string.Format(_localizer["Lkp_Error_TableDoesNotExist"], table) });
 
         var sql = $"UPDATE [{table}] SET Name = @Name, NameEn = @NameEn, IsActive = @IsActive WHERE Id = @Id";
         await _db.Database.ExecuteSqlRawAsync(sql,
@@ -187,7 +191,7 @@ public class LkpController : Controller
     public async Task<IActionResult> Delete([FromForm] string table, [FromForm] Guid id)
     {
         if (!IsValidTableName(table) || !TableExists(table))
-            return Json(new { success = false, message = "Table not found." });
+            return Json(new { success = false, message = _localizer["Lkp_Error_TableNotFound"].Value });
 
         await _db.Database.ExecuteSqlRawAsync(
             $"DELETE FROM [{table}] WHERE Id = @Id",
@@ -213,7 +217,6 @@ public class LkpController : Controller
     private static bool IsValidTableName(string? table)
     {
         if (string.IsNullOrWhiteSpace(table)) return false;
-        // Only allow alphanumeric + underscore (no SQL injection via table name)
         return System.Text.RegularExpressions.Regex.IsMatch(table, @"^[A-Za-z][A-Za-z0-9_]*$");
     }
 

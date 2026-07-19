@@ -9,7 +9,10 @@ public class AppRestartService : IAppRestartService
     {
         var webProjectPath = Path.Combine(projectRootPath, "AdminTemplate.Web");
 
-        var psi = new ProcessStartInfo("dotnet", $"build \"{webProjectPath}\" --no-restore -v quiet")
+        // Build in Release: the running app locks bin\Debug, so a Debug build here
+        // would fail with MSB3021 (file in use). This validates the generated code
+        // compiles; the running site reloads via the .cshtml touch / dotnet watch.
+        var psi = new ProcessStartInfo("dotnet", $"build \"{webProjectPath}\" --no-restore -v quiet -c Release")
         {
             RedirectStandardOutput = true,
             RedirectStandardError  = true,

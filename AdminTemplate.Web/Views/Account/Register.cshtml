@@ -1,11 +1,11 @@
-﻿@model AdminTemplate.Web.ViewModels.RegisterViewModel
+@model AdminTemplate.Web.ViewModels.RegisterViewModel
 @{
     Layout = "_AuthLayout";
-    ViewData["Title"] = "Create Account";
+    ViewData["Title"] = Localizer["Register_Title"];
 }
 
-<h2 class="auth-title">Create your account</h2>
-<p class="auth-subtitle">Fill in the details below to get started</p>
+<h2 class="auth-title">@Localizer["Register_Heading"]</h2>
+<p class="auth-subtitle">@Localizer["Register_Subtitle"]</p>
 
 <form asp-action="Register" method="post" novalidate>
     @Html.AntiForgeryToken()
@@ -21,7 +21,7 @@
     }
 
     <div class="mb-3">
-        <label asp-for="FullName" class="form-label">Full name</label>
+        <label asp-for="FullName" class="form-label">@Localizer["Common_FullName"]</label>
         <div class="field-icon-wrap">
             <i class="fa-regular fa-user field-icon"></i>
             <input asp-for="FullName" class="form-control" placeholder="John Doe" autocomplete="name" />
@@ -30,7 +30,7 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="Email" class="form-label">Email address</label>
+        <label asp-for="Email" class="form-label">@Localizer["Common_Email"]</label>
         <div class="field-icon-wrap">
             <i class="fa-regular fa-envelope field-icon"></i>
             <input asp-for="Email" class="form-control" placeholder="you@example.com" autocomplete="email" />
@@ -39,7 +39,7 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="Password" class="form-label">Password</label>
+        <label asp-for="Password" class="form-label">@Localizer["Common_Password"]</label>
         <div class="field-icon-wrap">
             <i class="fa-solid fa-lock field-icon"></i>
             <input asp-for="Password" class="form-control" placeholder="Min. 8 characters" autocomplete="new-password" />
@@ -48,7 +48,7 @@
     </div>
 
     <div class="mb-4">
-        <label asp-for="ConfirmPassword" class="form-label">Confirm password</label>
+        <label asp-for="ConfirmPassword" class="form-label">@Localizer["Common_ConfirmPassword"]</label>
         <div class="field-icon-wrap">
             <i class="fa-solid fa-lock field-icon"></i>
             <input asp-for="ConfirmPassword" class="form-control" placeholder="Repeat your password" autocomplete="new-password" />
@@ -59,7 +59,7 @@
     <div class="d-grid mb-2">
         <button type="submit" class="btn btn-primary btn-sm">
             <span class="btn-text">
-                Create Account &nbsp;<i class="fa-solid fa-user-plus"></i>
+                @Localizer["Register_SubmitButton"] &nbsp;<i class="fa-solid fa-user-plus"></i>
             </span>
         </button>
     </div>
@@ -67,8 +67,8 @@
 </form>
 
 <div class="auth-footer-link">
-    Already have an account?
-    <a asp-action="Login" asp-controller="Account">Sign in</a>
+    @Localizer["Register_AlreadyHaveAccount"]
+    <a asp-action="Login" asp-controller="Account">@Localizer["Register_SignIn"]</a>
 </div>
 
 @section Scripts {

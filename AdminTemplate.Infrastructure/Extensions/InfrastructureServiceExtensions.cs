@@ -1,4 +1,4 @@
-﻿using AdminTemplate.Application.Interfaces;
+using AdminTemplate.Application.Interfaces;
 using AdminTemplate.Application.Interfaces.CodeGen;
 using AdminTemplate.Application.Providers;
 using AdminTemplate.Application.Services;
@@ -7,6 +7,7 @@ using AdminTemplate.Infrastructure.Data;
 using AdminTemplate.Infrastructure.Providers;
 using AdminTemplate.Infrastructure.Repositories;
 using AdminTemplate.Infrastructure.Seed;
+using AdminTemplate.Infrastructure.Services;
 using AdminTemplate.Infrastructure.Services.CodeGen;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

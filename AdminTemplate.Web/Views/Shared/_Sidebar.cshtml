@@ -1,6 +1,8 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @inject AdminTemplate.Application.Providers.IObjectsProvider ObjectsProvider
 @using System.Security.Claims
+@using Microsoft.AspNetCore.Hosting
+@inject IWebHostEnvironment Environment
 @{
     var appName = Configuration["App:Name"] ?? "Admin Template";
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
@@ -73,7 +75,7 @@
                 <span class="nav-text">Role Permissions</span>
             </a>
 
-            @if (isSuperAdmin)
+            @if (isSuperAdmin && Environment.IsDevelopment())
             {
                 <div class="sidebar-nav-label">Developer</div>
 

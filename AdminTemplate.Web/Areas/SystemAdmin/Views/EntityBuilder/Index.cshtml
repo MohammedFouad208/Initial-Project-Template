@@ -67,7 +67,7 @@
                                 <td><strong>@entity.Name</strong></td>
                                 <td><code>@entity.TableName</code></td>
                                 <td><span class="badge badge-soft badge-soft-primary">@entity.Columns.Count cols</span></td>
-                                <td><span class="badge badge-soft badge-soft-secondary">@entity.Relations.Count rels</span></td>
+                                <td><span class="badge badge-soft badge-soft-primary">@entity.Relations.Count rels</span></td>
                                 <td>
                                     @if (entity.IsGenerated)
                                     {
@@ -96,10 +96,6 @@
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
                                         }
-                                        <a asp-action="PreviewSql" asp-route-id="@entity.Id"
-                                           class="btn btn-outline-info btn-sm" title="Preview SQL" target="_blank">
-                                            <i class="fa-solid fa-code"></i>
-                                        </a>
                                         <button type="button"
                                                 class="btn btn-success btn-sm btn-generate"
                                                 data-id="@entity.Id"

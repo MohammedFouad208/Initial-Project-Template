@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- ══ COMMON ══════════════════════════════════════════════════════════════ -->
+
+  <!-- Navigation / actions -->
+  <data name="Common_Home" xml:space="preserve"><value>Home</value></data>
+  <data name="Common_Create" xml:space="preserve"><value>Create</value></data>
+  <data name="Common_Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Common_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Common_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Common_SaveChanges" xml:space="preserve"><value>Save Changes</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>Back</value></data>
+  <data name="Common_Actions" xml:space="preserve"><value>Actions</value></data>
+  <data name="Common_ConfirmDelete" xml:space="preserve"><value>Confirm Delete</value></data>
+  <data name="Common_ActionCannotBeUndone" xml:space="preserve"><value>This action cannot be undone.</value></data>
+
+  <!-- Field labels -->
+  <data name="Common_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Common_Email" xml:space="preserve"><value>Email address</value></data>
+  <data name="Common_Password" xml:space="preserve"><value>Password</value></data>
+  <data name="Common_ConfirmPassword" xml:space="preserve"><value>Confirm password</value></data>
+  <data name="Common_FullName" xml:space="preserve"><value>Full name</value></data>
+  <data name="Common_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Common_Roles" xml:space="preserve"><value>Roles</value></data>
+  <data name="Common_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Common_Active" xml:space="preserve"><value>Active</value></data>
+  <data name="Common_Inactive" xml:space="preserve"><value>Inactive</value></data>
+  <data name="Common_Created" xml:space="preserve"><value>Created</value></data>
+
+  <!-- Generic messages -->
+  <data name="Common_UnexpectedError" xml:space="preserve"><value>An unexpected error occurred. Please try again.</value></data>
+  <data name="Common_NoRecordsFound" xml:space="preserve"><value>No records found.</value></data>
+  <data name="Common_Yes" xml:space="preserve"><value>Yes</value></data>
+  <data name="Common_No" xml:space="preserve"><value>No</value></data>
+  <data name="Common_ID" xml:space="preserve"><value>ID</value></data>
+  <data name="Common_CreatedAt" xml:space="preserve"><value>Created At</value></data>
+  <data name="Common_RecordInfo" xml:space="preserve"><value>Record Info</value></data>
+  <data name="Common_Relations" xml:space="preserve"><value>Relations</value></data>
+  <data name="Common_Select" xml:space="preserve"><value>-- Select --</value></data>
+  <data name="Common_Saving" xml:space="preserve"><value>Saving…</value></data>
+  <data name="Common_Information" xml:space="preserve"><value>Information</value></data>
+
+  <!-- ══ ACCOUNT ═════════════════════════════════════════════════════════════ -->
+
+  <!-- Login -->
+  <data name="Login_Title" xml:space="preserve"><value>Sign In</value></data>
+  <data name="Login_Heading" xml:space="preserve"><value>Welcome back</value></data>
+  <data name="Login_Subtitle" xml:space="preserve"><value>Sign in to your account to continue</value></data>
+  <data name="Login_ForgotPassword" xml:space="preserve"><value>Forgot password?</value></data>
+  <data name="Login_RememberMe" xml:space="preserve"><value>Remember me for 30 days</value></data>
+  <data name="Login_SignInButton" xml:space="preserve"><value>Sign In</value></data>
+  <data name="Login_NoAccount" xml:space="preserve"><value>Don’t have an account?</value></data>
+  <data name="Login_CreateOne" xml:space="preserve"><value>Create one</value></data>
+  <data name="Login_Error_Inactive" xml:space="preserve"><value>This account has been deactivated.</value></data>
+  <data name="Login_Error_LockedOut" xml:space="preserve"><value>Your account has been temporarily locked. Please try again later.</value></data>
+  <data name="Login_Error_InvalidCredentials" xml:space="preserve"><value>Invalid email or password.</value></data>
+
+  <!-- Register -->
+  <data name="Register_Title" xml:space="preserve"><value>Create Account</value></data>
+  <data name="Register_Heading" xml:space="preserve"><value>Create your account</value></data>
+  <data name="Register_Subtitle" xml:space="preserve"><value>Fill in the details below to get started</value></data>
+  <data name="Register_SubmitButton" xml:space="preserve"><value>Create Account</value></data>
+  <data name="Register_AlreadyHaveAccount" xml:space="preserve"><value>Already have an account?</value></data>
+  <data name="Register_SignIn" xml:space="preserve"><value>Sign in</value></data>
+  <data name="Register_Success" xml:space="preserve"><value>Account created successfully. Please sign in.</value></data>
+
+  <!-- Forgot password -->
+  <data name="ForgotPassword_Title" xml:space="preserve"><value>Forgot Password</value></data>
+  <data name="ForgotPassword_Heading" xml:space="preserve"><value>Forgot your password?</value></data>
+  <data name="ForgotPassword_Subtitle" xml:space="preserve"><value>Enter your registered email and we will send you a reset link.</value></data>
+  <data name="ForgotPassword_SubmitButton" xml:space="preserve"><value>Send Reset Link</value></data>
+  <data name="ForgotPassword_BackToSignIn" xml:space="preserve"><value>Back to Sign In</value></data>
+
+  <!-- Forgot password confirmation -->
+  <data name="ForgotPasswordConfirmation_Title" xml:space="preserve"><value>Check Your Email</value></data>
+  <data name="ForgotPasswordConfirmation_Heading" xml:space="preserve"><value>Check your email</value></data>
+  <data name="ForgotPasswordConfirmation_Subtitle" xml:space="preserve"><value>A password reset link has been sent to your inbox. Please check your email (and spam folder).</value></data>
+  <data name="ForgotPasswordConfirmation_DevNote" xml:space="preserve"><value>In development, the reset link is printed to the application console output.</value></data>
+  <data name="ForgotPasswordConfirmation_BackToSignIn" xml:space="preserve"><value>Back to Sign In</value></data>
+
+  <!-- Reset password -->
+  <data name="ResetPassword_Title" xml:space="preserve"><value>Reset Password</value></data>
+  <data name="ResetPassword_Heading" xml:space="preserve"><value>Set a new password</value></data>
+  <data name="ResetPassword_Subtitle" xml:space="preserve"><value>Choose a strong password for your account</value></data>
+  <data name="ResetPassword_NewPassword" xml:space="preserve"><value>New password</value></data>
+  <data name="ResetPassword_ConfirmNewPassword" xml:space="preserve"><value>Confirm new password</value></data>
+  <data name="ResetPassword_SubmitButton" xml:space="preserve"><value>Reset Password</value></data>
+  <data name="ResetPassword_BackToSignIn" xml:space="preserve"><value>Back to Sign In</value></data>
+  <data name="ResetPassword_Success" xml:space="preserve"><value>Your password has been reset successfully. Please sign in.</value></data>
+
+  <!-- ══ ROLES ════════════════════════════════════════════════════════════════ -->
+
+  <data name="Roles_Index_Title" xml:space="preserve"><value>Roles</value></data>
+  <data name="Roles_Create_Title" xml:space="preserve"><value>Create Role</value></data>
+  <data name="Roles_Edit_Title" xml:space="preserve"><value>Edit Role</value></data>
+  <data name="Roles_Column_RoleName" xml:space="preserve"><value>Role Name</value></data>
+  <data name="Roles_Column_Users" xml:space="preserve"><value>Users</value></data>
+  <data name="Roles_Column_Permissions" xml:space="preserve"><value>Permissions</value></data>
+  <data name="Roles_Toast_Created" xml:space="preserve"><value>Role created successfully.</value></data>
+  <data name="Roles_Toast_Updated" xml:space="preserve"><value>Role updated successfully.</value></data>
+  <data name="Roles_Error_DeleteFailed" xml:space="preserve"><value>Failed to delete role.</value></data>
+  <data name="Roles_Label_ManagePermissions" xml:space="preserve"><value>Manage Permissions</value></data>
+  <data name="Roles_Label_DeleteConfirm" xml:space="preserve"><value>Are you sure you want to delete the role "{0}"? This action cannot be undone.</value></data>
+
+  <!-- ══ USERS ════════════════════════════════════════════════════════════════ -->
+
+  <data name="Users_Index_Title" xml:space="preserve"><value>Users</value></data>
+  <data name="Users_Create_Title" xml:space="preserve"><value>Create User</value></data>
+  <data name="Users_Edit_Title" xml:space="preserve"><value>Edit User</value></data>
+  <data name="Users_Column_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Users_Column_NoRoles" xml:space="preserve"><value>No roles</value></data>
+  <data name="Users_Toast_Created" xml:space="preserve"><value>User created successfully.</value></data>
+  <data name="Users_Toast_Updated" xml:space="preserve"><value>User updated successfully.</value></data>
+  <data name="Users_Error_DeleteFailed" xml:space="preserve"><value>Failed to delete user.</value></data>
+  <data name="Users_Error_UpdateStatusFailed" xml:space="preserve"><value>Failed to update user status.</value></data>
+  <data name="Users_Label_Activate" xml:space="preserve"><value>Activate</value></data>
+  <data name="Users_Label_Deactivate" xml:space="preserve"><value>Deactivate</value></data>
+  <data name="Users_Label_DeleteConfirm" xml:space="preserve"><value>Are you sure you want to delete the user "{0}"? This action cannot be undone.</value></data>
+
+  <!-- ══ LOOKUPS ══════════════════════════════════════════════════════════════ -->
+
+  <data name="Lkp_Index_Title" xml:space="preserve"><value>Lookup Tables</value></data>
+  <data name="Lkp_Column_NameAr" xml:space="preserve"><value>Name (AR)</value></data>
+  <data name="Lkp_Column_NameEn" xml:space="preserve"><value>Name (EN)</value></data>
+  <data name="Lkp_Error_InvalidTableName" xml:space="preserve"><value>Invalid table name.</value></data>
+  <data name="Lkp_Error_NameRequired" xml:space="preserve"><value>Name is required.</value></data>
+  <data name="Lkp_Error_TableNotFound" xml:space="preserve"><value>Table not found.</value></data>
+  <data name="Lkp_Error_TableDoesNotExist" xml:space="preserve"><value>Table '{0}' does not exist.</value></data>
+  <data name="Lkp_Label_SelectTable" xml:space="preserve"><value>Select a table</value></data>
+  <data name="Lkp_Label_NoTablesYet" xml:space="preserve"><value>No lookup tables defined yet.</value></data>
+  <data name="Lkp_Label_SelectTablePrompt" xml:space="preserve"><value>Select a lookup table from the left to view its data.</value></data>
+  <data name="Lkp_Label_AddNew" xml:space="preserve"><value>Add New</value></data>
+  <data name="Lkp_Label_Tables" xml:space="preserve"><value>Tables</value></data>
+  <data name="Lkp_Label_DeleteConfirm" xml:space="preserve"><value>Are you sure you want to delete "{0}"? This action cannot be undone.</value></data>
+  <data name="Lkp_Label_ErrorSaving" xml:space="preserve"><value>Error saving record.</value></data>
+
+  <!-- ══ ROLE PERMISSIONS ═════════════════════════════════════════════════════ -->
+
+  <data name="RolePermissions_Index_Title" xml:space="preserve"><value>Manage Permissions</value></data>
+  <data name="RolePermissions_Index_Heading" xml:space="preserve"><value>Manage Permissions: {0}</value></data>
+  <data name="RolePermissions_Column_ObjectFunction" xml:space="preserve"><value>Object / Function</value></data>
+  <data name="RolePermissions_Toast_Saved" xml:space="preserve"><value>Permissions saved successfully.</value></data>
+  <data name="RolePermissions_Error_SaveFailed" xml:space="preserve"><value>An error occurred while saving permissions.</value></data>
+  <data name="RolePermissions_Label_SavePermissions" xml:space="preserve"><value>Save Permissions</value></data>
+  <data name="RolePermissions_Label_BackToRoles" xml:space="preserve"><value>Back to Roles</value></data>
+
+  <!-- ══ ENTITY BUILDER ═══════════════════════════════════════════════════════ -->
+
+  <data name="EntityBuilder_Toast_EntityCreated" xml:space="preserve"><value>Entity '{0}' created successfully.</value></data>
+  <data name="EntityBuilder_Toast_EntityUpdated" xml:space="preserve"><value>Entity '{0}' updated successfully.</value></data>
+  <data name="EntityBuilder_Toast_EntityGenerated" xml:space="preserve"><value>Entity '{0}' generated successfully. {1} files created. Please restart the application.</value></data>
+  <data name="EntityBuilder_Toast_EntityDeleted" xml:space="preserve"><value>Entity '{0}' and all generated artifacts deleted . Please restart the application.</value></data>
+  <data name="EntityBuilder_Toast_LkpCreated" xml:space="preserve"><value>Lookup table '{0}' created successfully. Please restart the application.</value></data>
+  <data name="EntityBuilder_Toast_LkpDeleted" xml:space="preserve"><value>Lookup table '{0}' deleted. Please restart the application.</value></data>
+  <data name="EntityBuilder_Error_EntityNotFound" xml:space="preserve"><value>Entity not found.</value></data>
+  <data name="EntityBuilder_Error_EntityNotFoundOrGenerated" xml:space="preserve"><value>Entity not found or already generated — cannot edit.</value></data>
+  <data name="EntityBuilder_Error_SqlError" xml:space="preserve"><value>SQL error: {0}</value></data>
+  <data name="EntityBuilder_Error_BuildFailed" xml:space="preserve"><value>Build failed: {0}</value></data>
+  <data name="EntityBuilder_Error_DeletedButBuildFailed" xml:space="preserve"><value>Entity deleted but build failed: {0}</value></data>
+  <data name="EntityBuilder_Error_InvalidLkpName" xml:space="preserve"><value>Invalid name. Use PascalCase letters and digits only.</value></data>
+  <data name="EntityBuilder_Error_InvalidTableName" xml:space="preserve"><value>Invalid table name.</value></data>
+
+  <!-- ══ RESOURCES MANAGEMENT ════════════════════════════════════════════════ -->
+
+  <data name="Resources_Index_Title" xml:space="preserve"><value>Resource Strings</value></data>
+  <data name="Resources_AddKey" xml:space="preserve"><value>Add Key</value></data>
+  <data name="Resources_Search" xml:space="preserve"><value>Search</value></data>
+  <data name="Resources_SearchPlaceholder" xml:space="preserve"><value>Search by key or value…</value></data>
+  <data name="Resources_NoResults" xml:space="preserve"><value>No resource strings found.</value></data>
+  <data name="Resources_Column_Key" xml:space="preserve"><value>Key</value></data>
+  <data name="Resources_Column_Value" xml:space="preserve"><value>Value</value></data>
+  <data name="Resources_KeyHint" xml:space="preserve"><value>Use prefix_Name format, e.g. Common_Save or Roles_Title</value></data>
+  <data name="Resources_DeleteConfirm" xml:space="preserve"><value>Are you sure you want to delete</value></data>
+  <data name="Resources_Error_KeyRequired" xml:space="preserve"><value>Key is required.</value></data>
+
+</root>
