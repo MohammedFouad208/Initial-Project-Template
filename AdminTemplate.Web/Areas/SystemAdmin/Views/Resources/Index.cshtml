@@ -1,0 +1,306 @@
+@using AdminTemplate.Application.Interfaces
+@model IReadOnlyList<ResourceEntry>
+@{
+    ViewData["Title"] = Localizer["Resources_Index_Title"];
+    string? search = ViewBag.Search;
+
+    var groups = Model
+        .GroupBy(e => e.Key.Contains('_') ? e.Key[..e.Key.IndexOf('_')] : e.Key)
+        .OrderBy(g => g.Key)
+        .ToList();
+}
+
+<div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
+    <div>
+        <h1 class="mb-1">
+            <i class="fa-solid fa-language me-2 text-primary"></i>@Localizer["Resources_Index_Title"]
+        </h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="SystemAdmin" asp-controller="Home" asp-action="Index" class="text-decoration-none breadcrumb-link">
+                        @Localizer["Common_Home"]
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer["Resources_Index_Title"]</li>
+            </ol>
+        </nav>
+    </div>
+    <button type="button" class="btn btn-primary btn-sm" id="addResourceBtn">
+        <i class="fa-solid fa-plus me-1"></i>@Localizer["Resources_AddKey"]
+    </button>
+</div>
+
+<!-- Search bar -->
+<form method="get" class="mb-4">
+    <div class="input-group" style="max-width:420px">
+        <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+        <input type="search" name="search" class="form-control" value="@search"
+               placeholder="@Localizer["Resources_SearchPlaceholder"]" />
+        <button class="btn btn-outline-secondary" type="submit">@Localizer["Resources_Search"]</button>
+        @if (!string.IsNullOrEmpty(search))
+        {
+            <a asp-action="Index" class="btn btn-outline-secondary">@Localizer["Common_Cancel"]</a>
+        }
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        <i class="fa-solid fa-circle-info me-2"></i>@Localizer["Resources_NoResults"]
+    </div>
+}
+else
+{
+    foreach (var group in groups)
+    {
+        <div class="card mb-3 resource-group" data-group="@group.Key">
+            <div class="card-header d-flex align-items-center justify-content-between py-2 resource-group-header"
+                 role="button" data-bs-toggle="collapse" data-bs-target="#group-@group.Key"
+                 aria-expanded="true">
+                <span class="fw-semibold">
+                    <i class="fa-solid fa-tag me-2 text-primary opacity-75"></i>@group.Key
+                    <span class="badge bg-secondary ms-2" style="font-weight:400;font-size:.7rem">@group.Count()</span>
+                </span>
+                <i class="fa-solid fa-chevron-down toggle-chevron" style="font-size:.75rem;transition:transform .2s"></i>
+            </div>
+            <div class="collapse show" id="group-@group.Key">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 resource-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:35%">@Localizer["Resources_Column_Key"]</th>
+                                <th>@Localizer["Resources_Column_Value"]</th>
+                                <th style="width:90px" class="text-center">@Localizer["Common_Actions"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var entry in group.OrderBy(e => e.Key))
+                            {
+                                <tr data-key="@entry.Key">
+                                    <td class="align-middle">
+                                        <code class="user-select-all" style="font-size:.8rem">@entry.Key</code>
+                                    </td>
+                                    <td class="align-middle">
+                                        <span class="res-display-value">@entry.Value</span>
+                                        <input type="text" class="form-control form-control-sm res-edit-input d-none"
+                                               value="@entry.Value" />
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <div class="d-flex gap-1 justify-content-center res-view-actions">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm res-edit-btn"
+                                                    title="@Localizer["Common_Edit"]">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger btn-sm res-delete-btn"
+                                                    title="@Localizer["Common_Delete"]">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div>
+                                        <div class="d-flex gap-1 justify-content-center res-edit-actions d-none">
+                                            <button type="button" class="btn btn-success btn-sm res-save-btn"
+                                                    title="@Localizer["Common_Save"]">
+                                                <i class="fa-solid fa-check"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm res-cancel-btn"
+                                                    title="@Localizer["Common_Cancel"]">
+                                                <i class="fa-solid fa-xmark"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@Html.AntiForgeryToken()
+
+<!-- Add / Edit key modal -->
+<div class="modal fade" id="resourceModal" tabindex="-1" aria-labelledby="resourceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="resourceModalLabel">
+                    <i class="fa-solid fa-plus me-2"></i>@Localizer["Resources_AddKey"]
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label fw-medium">@Localizer["Resources_Column_Key"] <span class="text-danger">*</span></label>
+                    <input type="text" id="modalKey" class="form-control font-monospace"
+                           placeholder="e.g. Common_MyLabel" />
+                    <div class="form-text">@Localizer["Resources_KeyHint"]</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-medium">@Localizer["Resources_Column_Value"]</label>
+                    <input type="text" id="modalValue" class="form-control" />
+                </div>
+                <div class="alert alert-danger d-none" id="modalError"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Common_Cancel"]</button>
+                <button type="button" class="btn btn-primary" id="modalSaveBtn">
+                    <i class="fa-solid fa-floppy-disk me-1"></i>@Localizer["Common_Save"]
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete confirm modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title">
+                    <i class="fa-solid fa-triangle-exclamation text-danger me-2"></i>@Localizer["Common_ConfirmDelete"]
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">@Localizer["Resources_DeleteConfirm"] <strong id="deleteKeyLabel"></strong>?</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Common_Cancel"]</button>
+                <button type="button" class="btn btn-danger" id="deleteConfirmBtn">
+                    <i class="fa-solid fa-trash me-1"></i>@Localizer["Common_Delete"]
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function () {
+    var _token      = $('input[name="__RequestVerificationToken"]').val();
+    var _upsertUrl  = '@Url.Action("Upsert", "Resources", new { area = "SystemAdmin" })';
+    var _deleteUrl  = '@Url.Action("Delete", "Resources", new { area = "SystemAdmin" })';
+    var _deleteKey  = null;
+
+    // ── Collapse chevron ─────────────────────────────────────────────────────
+    $(document).on('show.bs.collapse',  '.collapse', function () {
+        $(this).closest('.card').find('.toggle-chevron').css('transform', 'rotate(0deg)');
+    });
+    $(document).on('hide.bs.collapse', '.collapse', function () {
+        $(this).closest('.card').find('.toggle-chevron').css('transform', 'rotate(-90deg)');
+    });
+
+    // ── Inline edit ──────────────────────────────────────────────────────────
+    $(document).on('click', '.res-edit-btn', function () {
+        var $tr = $(this).closest('tr');
+        $tr.find('.res-display-value, .res-view-actions').addClass('d-none');
+        $tr.find('.res-edit-input, .res-edit-actions').removeClass('d-none');
+        $tr.find('.res-edit-input').trigger('focus').select();
+    });
+
+    $(document).on('click', '.res-cancel-btn', function () {
+        var $tr = $(this).closest('tr');
+        var $input = $tr.find('.res-edit-input');
+        $input.val($tr.find('.res-display-value').text()); // restore original
+        $tr.find('.res-display-value, .res-view-actions').removeClass('d-none');
+        $tr.find('.res-edit-input, .res-edit-actions').addClass('d-none');
+    });
+
+    $(document).on('click', '.res-save-btn', function () {
+        var $tr    = $(this).closest('tr');
+        var key    = $tr.data('key');
+        var value  = $tr.find('.res-edit-input').val();
+        var $btn   = $(this).prop('disabled', true);
+
+        post(_upsertUrl, { key: key, value: value })
+            .then(function (res) {
+                if (!res.success) { alert(res.message); return; }
+                $tr.find('.res-display-value').text(value);
+                $tr.find('.res-display-value, .res-view-actions').removeClass('d-none');
+                $tr.find('.res-edit-input, .res-edit-actions').addClass('d-none');
+            })
+            .finally(function () { $btn.prop('disabled', false); });
+    });
+
+    // Save on Enter inside inline input
+    $(document).on('keydown', '.res-edit-input', function (e) {
+        if (e.key === 'Enter')  { $(this).closest('tr').find('.res-save-btn').trigger('click'); }
+        if (e.key === 'Escape') { $(this).closest('tr').find('.res-cancel-btn').trigger('click'); }
+    });
+
+    // ── Delete ───────────────────────────────────────────────────────────────
+    $(document).on('click', '.res-delete-btn', function () {
+        _deleteKey = $(this).closest('tr').data('key');
+        $('#deleteKeyLabel').text(_deleteKey);
+        bootstrap.Modal.getOrCreateInstance($('#deleteModal')[0]).show();
+    });
+
+    $('#deleteConfirmBtn').on('click', function () {
+        var $btn = $(this).prop('disabled', true);
+        post(_deleteUrl, { key: _deleteKey })
+            .then(function (res) {
+                if (!res.success) { alert(res.message); return; }
+                bootstrap.Modal.getOrCreateInstance($('#deleteModal')[0]).hide();
+                var $tr = $('tr[data-key="' + _deleteKey + '"]');
+                var $tbody = $tr.closest('tbody');
+                $tr.remove();
+                // remove entire group card if empty
+                if ($tbody.children('tr').length === 0) {
+                    $tbody.closest('.resource-group').remove();
+                }
+            })
+            .finally(function () { $btn.prop('disabled', false); });
+    });
+
+    // ── Add new key modal ────────────────────────────────────────────────────
+    $('#addResourceBtn').on('click', function () {
+        $('#modalKey').val('');
+        $('#modalValue').val('');
+        $('#modalError').addClass('d-none').text('');
+        bootstrap.Modal.getOrCreateInstance($('#resourceModal')[0]).show();
+        setTimeout(function () { $('#modalKey').trigger('focus'); }, 300);
+    });
+
+    $('#modalSaveBtn').on('click', function () {
+        var key   = $('#modalKey').val().trim();
+        var value = $('#modalValue').val();
+
+        if (!key) {
+            $('#modalError').removeClass('d-none').text('@Localizer["Resources_Error_KeyRequired"]');
+            return;
+        }
+        $('#modalError').addClass('d-none');
+
+        var $btn = $(this).prop('disabled', true);
+        post(_upsertUrl, { key: key, value: value })
+            .then(function (res) {
+                if (!res.success) {
+                    $('#modalError').removeClass('d-none').text(res.message);
+                    return;
+                }
+                bootstrap.Modal.getOrCreateInstance($('#resourceModal')[0]).hide();
+                // reload so new row appears in the right group
+                window.location.reload();
+            })
+            .finally(function () { $btn.prop('disabled', false); });
+    });
+
+    $('#modalKey, #modalValue').on('keydown', function (e) {
+        if (e.key === 'Enter') $('#modalSaveBtn').trigger('click');
+    });
+
+    // ── Helper ───────────────────────────────────────────────────────────────
+    function post(url, data) {
+        data.__RequestVerificationToken = _token;
+        return fetch(url, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body:    new URLSearchParams(data)
+        }).then(function (r) { return r.json(); });
+    }
+}());
+</script>
+}

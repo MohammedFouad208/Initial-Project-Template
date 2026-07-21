@@ -2,9 +2,11 @@ using AdminTemplate.Application.DTOs;
 using AdminTemplate.Application.Interfaces;
 using AdminTemplate.Application.Providers;
 using AdminTemplate.Web.Filters;
+
 using AdminTemplate.Web.ViewModels.RolePermissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace AdminTemplate.Web.Controllers;
 
@@ -15,15 +17,18 @@ public class RolePermissionsController : Controller
     private readonly IRoleService _roleService;
     private readonly IPermissionService _permissionService;
     private readonly IPermissionProvider _permissionProvider;
+    private readonly IStringLocalizer<SharedResource> _localizer;
 
     public RolePermissionsController(
         IRoleService roleService,
         IPermissionService permissionService,
-        IPermissionProvider permissionProvider)
+        IPermissionProvider permissionProvider,
+        IStringLocalizer<SharedResource> localizer)
     {
         _roleService        = roleService;
         _permissionService  = permissionService;
         _permissionProvider = permissionProvider;
+        _localizer          = localizer;
     }
 
     // ─── GET /RolePermissions/{roleId} ────────────────────────────────────
@@ -74,12 +79,12 @@ public class RolePermissionsController : Controller
                 .Select(parts => new PermissionDto(parts[0], parts[1]));
 
             await _permissionService.SaveRolePermissionsAsync(guid, permissions);
-            TempData["ToastMessage"] = "Permissions saved successfully.";
+            TempData["ToastMessage"] = _localizer["RolePermissions_Toast_Saved"];
             TempData["ToastType"] = "success";
         }
         catch (Exception)
         {
-            TempData["ToastMessage"] = "An error occurred while saving permissions.";
+            TempData["ToastMessage"] = _localizer["RolePermissions_Error_SaveFailed"];
             TempData["ToastType"] = "danger";
         }
 

@@ -55,7 +55,8 @@
       return base;
     });
 
-    var hasActions = (permissions.canUpdate && config.editUrl) ||
+    var hasActions = config.detailsUrl ||
+                     (permissions.canUpdate && config.editUrl) ||
                      (permissions.canDelete && config.deleteUrl);
 
     if (hasActions) {
@@ -66,9 +67,14 @@
         searchable: false,
         render: function (data, type, row) {
           var html = '<div class="d-flex gap-1">';
+          if (config.detailsUrl) {
+            var detailsHref = config.detailsUrl.replace(":id", row.id);
+            html += '<a href="' + detailsHref + '" class="btn btn-outline-primary btn-sm" title="Details">' +
+                    '<i class="fa-solid fa-eye"></i></a>';
+          }
           if (permissions.canUpdate && config.editUrl) {
-            var href = config.editUrl.replace(":id", row.id);
-            html += '<a href="' + href + '" class="btn btn-outline-secondary btn-sm" title="Edit">' +
+            var editHref = config.editUrl.replace(":id", row.id);
+            html += '<a href="' + editHref + '" class="btn btn-outline-secondary btn-sm" title="Edit">' +
                     '<i class="fa-solid fa-pen-to-square"></i></a>';
           }
           if (permissions.canDelete && config.deleteUrl) {
@@ -95,14 +101,21 @@
         url:  config.ajaxUrl,
         type: "GET",
         data: function (d) {
-          return {
+          var params = {
             draw:          d.draw,
             start:         d.start,
             length:        d.length,
-            search:        d.search && d.search.value ? d.search.value : null,
             sortColumn:    d.order && d.order[0] ? d.order[0].column : 0,
             sortDirection: d.order && d.order[0] ? d.order[0].dir : "asc"
           };
+          // Per-field filters
+          if (config.searchFields && config.searchFields.length) {
+            config.searchFields.forEach(function (f) {
+              var val = $("#dt-filter-" + f.key).val();
+              if (val) params["Filters[" + f.key + "]"] = val;
+            });
+          }
+          return params;
         },
         error: function (xhr) {
           _showError($table, config.messages.errorTitle, table);
@@ -174,46 +187,78 @@
     if (!$wrapper.length) { $wrapper = $table.parent(); }
 
     var $toolbar = $wrapper.find(".dt-custom-toolbar");
+    $toolbar.html("");
 
-    var $row = $('<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3"></div>');
+    // Row 1: search fields (2 per row) + length selector
+    if (config.searchFields && config.searchFields.length) {
+      var $searchRow = $('<div class="row g-2 mb-2"></div>');
 
-    // Left: search input
-    var $searchWrap = $(
-      '<div class="d-flex align-items-center gap-2">' +
-        '<div class="input-group input-group-sm" style="min-width:220px">' +
-          '<span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>' +
-          '<input type="search" class="form-control dt-search-input" placeholder="Search…" aria-label="Search table">' +
-        '</div>' +
-        '<select class="form-select form-select-sm dt-length-select" style="width:auto">' +
+      config.searchFields.forEach(function (f) {
+        var $col = $('<div class="col-12 col-sm-6"></div>');
+        if (f.type === "select" && f.dataUrl) {
+          // Dropdown filter — populated via AJAX
+          var $select = $('<select class="form-select form-select-sm dt-field-search dt-field-select"></select>')
+            .attr("id",         "dt-filter-" + f.key)
+            .attr("aria-label", "Filter " + _escapeHtml(f.label));
+          $select.append($('<option value="">— ' + _escapeHtml(f.label) + ' —</option>'));
+          // Load options
+          $.getJSON(f.dataUrl, function (items) {
+            $.each(items, function (_, item) {
+              $select.append($('<option></option>').val(item.id).text(item.text));
+            });
+          });
+          $col.append($select);
+        } else {
+          $col.append(
+            $('<div class="input-group input-group-sm"></div>').append(
+              $('<span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>'),
+              $('<input type="search" class="form-control dt-field-search">')
+                .attr("id",          "dt-filter-" + f.key)
+                .attr("placeholder", _escapeHtml(f.label) + "…")
+                .attr("aria-label",  "Search " + _escapeHtml(f.label))
+            )
+          );
+        }
+        $searchRow.append($col);
+      });
+
+      $toolbar.append($searchRow);
+    }
+
+    // Row 2: length selector left, Create button right
+    var $bottomRow = $('<div class="d-flex justify-content-between align-items-center mb-3"></div>');
+
+    $bottomRow.append(
+      $('<select class="form-select form-select-sm dt-length-select" style="width:auto">' +
           '<option value="10">10</option>' +
           '<option value="25">25</option>' +
           '<option value="50">50</option>' +
           '<option value="100">100</option>' +
-        '</select>' +
-      '</div>'
+        '</select>')
     );
 
-    // Right: Create button
-    var $right = $('<div></div>');
     if (permissions.canCreate && config.createUrl) {
-      $right.append(
+      $bottomRow.append(
         $('<a class="btn btn-primary btn-sm"></a>')
           .attr("href", config.createUrl)
           .html('<i class="fa-solid fa-plus me-1"></i>Create')
       );
     }
 
-    $row.append($searchWrap).append($right);
-    $toolbar.html("").append($row);
+    $toolbar.append($bottomRow);
 
-    // Wire search
+    // Wire per-field text search with debounce
     var searchTimer;
-    $wrapper.on("input", ".dt-search-input", function () {
-      var val = $(this).val();
+    $wrapper.on("input", ".dt-field-search", function () {
       clearTimeout(searchTimer);
       searchTimer = setTimeout(function () {
-        table.search(val).draw();
+        table.ajax.reload(null, false);
       }, 400);
+    });
+
+    // Wire select search (immediate)
+    $wrapper.on("change", ".dt-field-select", function () {
+      table.ajax.reload(null, false);
     });
 
     // Wire length

@@ -17,7 +17,39 @@
 
     <div class="d-flex align-items-center gap-2">
 
-        <button class="rtl-toggle-btn" type="button" title="Switch to RTL">RTL</button>
+        @{
+            var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            var isArabic = currentCulture == "ar";
+        }
+        <div class="dropdown">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle px-2 py-1"
+                    type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                    style="font-size:.8rem;min-width:52px">
+                <i class="fa-solid fa-globe me-1"></i>@(isArabic ? "AR" : "EN")
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" style="min-width:120px">
+                <li>
+                    <form method="post" asp-controller="Language" asp-action="Set">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="culture" value="en" />
+                        <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                        <button type="submit" class="dropdown-item @(!isArabic ? "active" : "")">
+                            🇬🇧 English
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <form method="post" asp-controller="Language" asp-action="Set">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="culture" value="ar" />
+                        <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                        <button type="submit" class="dropdown-item @(isArabic ? "active" : "")">
+                            🇸🇦 العربية
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
 
         <button type="button" class="topnav-icon-btn position-relative" aria-label="Notifications">
             <i class="fa-regular fa-bell"></i>

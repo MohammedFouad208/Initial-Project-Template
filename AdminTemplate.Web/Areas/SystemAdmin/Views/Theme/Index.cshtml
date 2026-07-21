@@ -1,0 +1,144 @@
+@using AdminTemplate.Application.Interfaces.CodeGen
+@model ThemeConfig
+@{
+    ViewData["Title"] = "Theme Engine";
+}
+
+<div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
+    <div>
+        <h1 class="mb-1"><i class="fa-solid fa-palette me-2 text-warning"></i>Theme Engine</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="SystemAdmin" asp-controller="Home" asp-action="Index"
+                       class="text-decoration-none" style="color:var(--primary)">System Admin</a>
+                </li>
+                <li class="breadcrumb-item active">Theme Engine</li>
+            </ol>
+        </nav>
+    </div>
+    <a asp-action="Preview" class="btn btn-outline-secondary" target="_blank">
+        <i class="fa-solid fa-eye me-1"></i>Preview CSS
+    </a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show"
+         style="border-inline-start:4px solid var(--success)">
+        <i class="fa-solid fa-circle-check me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show"
+         style="border-inline-start:4px solid var(--danger)">
+        <i class="fa-solid fa-circle-exclamation me-2"></i>@TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<form asp-action="Save" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header fw-semibold"><i class="fa-solid fa-droplet me-2"></i>Brand Colors</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label class="form-label">Primary Color</label>
+                            <div class="input-group">
+                                <input type="color" class="form-control form-control-color"
+                                       name="PrimaryColor" value="@Model.PrimaryColor" id="primaryColorPicker" />
+                                <input type="text" class="form-control" name="PrimaryColor"
+                                       value="@Model.PrimaryColor" id="primaryColorText" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Secondary Color</label>
+                            <div class="input-group">
+                                <input type="color" class="form-control form-control-color"
+                                       name="SecondaryColor" value="@Model.SecondaryColor" />
+                                <input type="text" class="form-control" value="@Model.SecondaryColor" readonly />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Success Color</label>
+                            <div class="input-group">
+                                <input type="color" class="form-control form-control-color"
+                                       name="SuccessColor" value="@Model.SuccessColor" />
+                                <input type="text" class="form-control" value="@Model.SuccessColor" readonly />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Danger Color</label>
+                            <div class="input-group">
+                                <input type="color" class="form-control form-control-color"
+                                       name="DangerColor" value="@Model.DangerColor" />
+                                <input type="text" class="form-control" value="@Model.DangerColor" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header fw-semibold"><i class="fa-solid fa-sidebar me-2"></i>Sidebar & Typography</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label class="form-label">Sidebar Background</label>
+                            <div class="input-group">
+                                <input type="color" class="form-control form-control-color"
+                                       name="SidebarBg" value="@Model.SidebarBg" />
+                                <input type="text" class="form-control" value="@Model.SidebarBg" readonly />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Sidebar Text</label>
+                            <div class="input-group">
+                                <input type="color" class="form-control form-control-color"
+                                       name="SidebarText" value="@Model.SidebarText" />
+                                <input type="text" class="form-control" value="@Model.SidebarText" readonly />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Font Family</label>
+                            <select class="form-select" name="FontFamily">
+                                <option value="'Inter', sans-serif" selected="@(Model.FontFamily.Contains("Inter") ? "selected" : null)">Inter</option>
+                                <option value="'Cairo', sans-serif" selected="@(Model.FontFamily.Contains("Cairo") ? "selected" : null)">Cairo</option>
+                                <option value="'Segoe UI', sans-serif" selected="@(Model.FontFamily.Contains("Segoe") ? "selected" : null)">Segoe UI</option>
+                                <option value="'Roboto', sans-serif" selected="@(Model.FontFamily.Contains("Roboto") ? "selected" : null)">Roboto</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-primary btn-md">
+            <i class="fa-solid fa-floppy-disk me-1"></i>Save & Apply Theme
+        </button>
+    </div>
+</form>
+
+@section Scripts {
+<script>
+// Sync color picker ↔ text input for primary color as a demo
+document.querySelectorAll('input[type="color"]').forEach(function (picker) {
+    picker.addEventListener('input', function () {
+        var textInput = this.nextElementSibling;
+        if (textInput && textInput.type === 'text') {
+            textInput.value = this.value;
+        }
+    });
+});
+</script>
+}

@@ -1,14 +1,35 @@
-﻿using AdminTemplate.Domain.Entities;
+﻿using AdminTemplate.Application.Interfaces;
+using AdminTemplate.Domain.Entities;
 using AdminTemplate.Infrastructure.Data;
 using AdminTemplate.Infrastructure.Extensions;
 using AdminTemplate.Infrastructure.Seed;
+using AdminTemplate.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddLocalization();
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supported = new[] { "en", "ar" };
+    options.SetDefaultCulture("en")
+           .AddSupportedCultures(supported)
+           .AddSupportedUICultures(supported);
+    options.ApplyCurrentCultureToResponseHeaders = true;
+});
+
+var mvcBuilder = builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
+if (builder.Environment.IsDevelopment())
+{
+    mvcBuilder.AddRazorRuntimeCompilation();
+}
+builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
+builder.Services.AddScoped<IResourceService, ResourceService>();
 
 builder.Services
     .AddIdentity<ApplicationUser, ApplicationRole>(options =>
@@ -35,6 +56,9 @@ builder.Services.AddAuthorization(options =>
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
+
+    options.AddPolicy("SuperAdminOnly", policy =>
+        policy.RequireRole("SuperAdmin"));
 });
 
 var app = builder.Build();
@@ -47,6 +71,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseRequestLocalization();
 
 app.UseStatusCodePagesWithRedirects("/Error/NotFound");
 
@@ -54,6 +79,10 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

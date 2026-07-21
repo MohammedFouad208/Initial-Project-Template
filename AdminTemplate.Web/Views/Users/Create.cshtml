@@ -1,20 +1,20 @@
 @model AdminTemplate.Web.ViewModels.Users.CreateUserViewModel
 @{
-    ViewData["Title"] = "Create User";
+    ViewData["Title"] = Localizer["Users_Create_Title"];
 }
 
 <div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
     <div>
-        <h1 class="mb-1">Create User</h1>
+        <h1 class="mb-1">@Localizer["Users_Create_Title"]</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none breadcrumb-link">Home</a>
+                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none breadcrumb-link">@Localizer["Common_Home"]</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a asp-controller="Users" asp-action="Index" class="text-decoration-none breadcrumb-link">Users</a>
+                    <a asp-controller="Users" asp-action="Index" class="text-decoration-none breadcrumb-link">@Localizer["Users_Index_Title"]</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Create</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer["Common_Create"]</li>
             </ol>
         </nav>
     </div>
@@ -22,17 +22,19 @@
 
 <div class="card">
     <div class="card-body">
-        <div asp-validation-summary="ModelOnly"
-             class="alert alert-danger mb-4"
-             style="border-inline-start:4px solid var(--danger)"
-             role="alert">
-        </div>
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger mb-4"
+                 style="border-inline-start:4px solid var(--danger)"
+                 role="alert">
+            </div>
+        }
 
         <form asp-action="Create" method="post" novalidate>
             @Html.AntiForgeryToken()
 
             <div class="row g-3">
-                <!-- Full Name -->
                 <div class="col-md-6">
                     <label asp-for="FullName" class="form-label"></label>
                     <div class="field-icon-wrap">
@@ -42,7 +44,6 @@
                     <span asp-validation-for="FullName" class="text-danger small"></span>
                 </div>
 
-                <!-- Email -->
                 <div class="col-md-6">
                     <label asp-for="Email" class="form-label"></label>
                     <div class="field-icon-wrap">
@@ -52,7 +53,6 @@
                     <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
 
-                <!-- Password -->
                 <div class="col-md-6">
                     <label asp-for="Password" class="form-label"></label>
                     <div class="field-icon-wrap">
@@ -62,7 +62,6 @@
                     <span asp-validation-for="Password" class="text-danger small"></span>
                 </div>
 
-                <!-- Confirm Password -->
                 <div class="col-md-6">
                     <label asp-for="ConfirmPassword" class="form-label"></label>
                     <div class="field-icon-wrap">
@@ -72,9 +71,8 @@
                     <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
                 </div>
 
-                <!-- Roles -->
                 <div class="col-md-6">
-                    <label class="form-label">Roles</label>
+                    <label class="form-label">@Localizer["Common_Roles"]</label>
                     <select id="rolesSelect" name="SelectedRoles" class="form-select" multiple
                             aria-label="Select one or more roles">
                         @foreach (var role in Model.AvailableRoles)
@@ -85,20 +83,19 @@
                     </select>
                 </div>
 
-                <!-- Active toggle -->
                 <div class="col-md-6 d-flex align-items-end pb-1">
                     <div class="form-check form-switch">
                         <input asp-for="IsActive" class="form-check-input" role="switch" />
-                        <label asp-for="IsActive" class="form-check-label">Active</label>
+                        <label asp-for="IsActive" class="form-check-label">@Localizer["Common_Active"]</label>
                     </div>
                 </div>
             </div>
 
             <div class="d-flex gap-2 mt-4">
-                <button type="submit" class="btn btn-primary btn-sm">
-                    <i class="fa-solid fa-floppy-disk me-1"></i>Create User
+                <button type="submit" class="btn btn-primary btn-md">
+                    <i class="fa-solid fa-floppy-disk me-1"></i>@Localizer["Users_Create_Title"]
                 </button>
-                <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Cancel</a>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-md">@Localizer["Common_Cancel"]</a>
             </div>
         </form>
     </div>
@@ -108,12 +105,7 @@
     <partial name="_ValidationScriptsPartial" />
     <script>
         $(function () {
-            $('#rolesSelect').select2({
-                theme: 'bootstrap-5',
-                placeholder: 'Select roles',
-                allowClear: true,
-                width: '100%'
-            });
+            $('#rolesSelect').select2({ theme: 'bootstrap-5', placeholder: 'Select roles', allowClear: true, width: '100%' });
         });
     </script>
 }

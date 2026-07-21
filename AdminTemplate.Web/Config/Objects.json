@@ -1,0 +1,29 @@
+{
+  "Objects": [
+    {
+      "Name": "User",
+      "DisplayName": "Users",
+      "Icon": "fa-solid fa-users",
+      "Controller": "Users",
+      "Functions": [
+        "Browse",
+        "Create",
+        "Update",
+        "Delete"
+      ]
+    },
+    {
+      "Name": "Role",
+      "DisplayName": "Roles",
+      "Icon": "fa-solid fa-shield-halved",
+      "Controller": "Roles",
+      "Functions": [
+        "Browse",
+        "Create",
+        "Update",
+        "Delete",
+        "AssignPermissions"
+      ]
+    }
+  ]
+}

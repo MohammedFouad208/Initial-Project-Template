@@ -2,10 +2,12 @@ using System.Security.Claims;
 using AdminTemplate.Application.DTOs;
 using AdminTemplate.Application.Interfaces;
 using AdminTemplate.Web.Filters;
-using AdminTemplate.Web.Models;
+using AdminTemplate.Application.Common.DataTable;
+
 using AdminTemplate.Web.ViewModels.Roles;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace AdminTemplate.Web.Controllers;
 
@@ -14,11 +16,13 @@ public class RolesController : Controller
 {
     private readonly IRoleService _roleService;
     private readonly IPermissionService _permissionService;
+    private readonly IStringLocalizer<SharedResource> _localizer;
 
-    public RolesController(IRoleService roleService, IPermissionService permissionService)
+    public RolesController(IRoleService roleService, IPermissionService permissionService, IStringLocalizer<SharedResource> localizer)
     {
         _roleService       = roleService;
         _permissionService = permissionService;
+        _localizer         = localizer;
     }
 
     // ─── Browse ───────────────────────────────────────────────────────────
@@ -77,9 +81,7 @@ public class RolesController : Controller
     public async Task<IActionResult> Create(CreateRoleViewModel vm)
     {
         if (!ModelState.IsValid)
-        {
             return View(vm);
-        }
 
         var dto    = new CreateRoleDto(vm.Name.Trim(), vm.Description?.Trim());
         var result = await _roleService.CreateAsync(dto);
@@ -87,13 +89,11 @@ public class RolesController : Controller
         if (!result.Succeeded)
         {
             foreach (var error in result.Errors)
-            {
                 ModelState.AddModelError("Name", error.Description);
-            }
             return View(vm);
         }
 
-        TempData["ToastMessage"] = "Role created successfully.";
+        TempData["ToastMessage"] = _localizer["Roles_Toast_Created"];
         TempData["ToastType"] = "success";
         return RedirectToAction(nameof(Index));
     }
@@ -106,9 +106,7 @@ public class RolesController : Controller
     {
         var dto = await _roleService.GetByIdAsync(id);
         if (dto is null)
-        {
             return RedirectToAction(nameof(Index));
-        }
 
         var vm = new EditRoleViewModel
         {
@@ -125,9 +123,7 @@ public class RolesController : Controller
     public async Task<IActionResult> Edit(string id, EditRoleViewModel vm)
     {
         if (!ModelState.IsValid)
-        {
             return View(vm);
-        }
 
         var dto    = new UpdateRoleDto(vm.Name.Trim(), vm.Description?.Trim());
         var result = await _roleService.UpdateAsync(id, dto);
@@ -135,13 +131,11 @@ public class RolesController : Controller
         if (!result.Succeeded)
         {
             foreach (var error in result.Errors)
-            {
                 ModelState.AddModelError("Name", error.Description);
-            }
             return View(vm);
         }
 
-        TempData["ToastMessage"] = "Role updated successfully.";
+        TempData["ToastMessage"] = _localizer["Roles_Toast_Updated"];
         TempData["ToastType"] = "success";
         return RedirectToAction(nameof(Index));
     }
@@ -156,14 +150,12 @@ public class RolesController : Controller
         var result = await _roleService.DeleteAsync(id);
 
         if (result.Succeeded)
-        {
             return Json(new { success = true });
-        }
 
         return Json(new
         {
             success = false,
-            message = result.Errors.FirstOrDefault()?.Description ?? "Failed to delete role."
+            message = result.Errors.FirstOrDefault()?.Description ?? _localizer["Roles_Error_DeleteFailed"]
         });
     }
 

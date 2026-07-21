@@ -1,4 +1,4 @@
-namespace AdminTemplate.Web.Models;
+namespace AdminTemplate.Application.Common.DataTable;
 
 public class DataTableResponse<T>
 {

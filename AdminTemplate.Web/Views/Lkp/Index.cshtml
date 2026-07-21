@@ -1,0 +1,308 @@
+@using AdminTemplate.Application.DTOs
+@{
+    ViewData["Title"] = Localizer["Lkp_Index_Title"];
+    var tables = (IReadOnlyList<LkpTableDto>)ViewBag.Tables;
+    bool canCreate = ViewBag.CanCreate == true;
+    bool canUpdate = ViewBag.CanUpdate == true;
+    bool canDelete = ViewBag.CanDelete == true;
+}
+
+<div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
+    <div>
+        <h1 class="mb-1"><i class="fa-solid fa-list me-2 text-primary"></i>@Localizer["Lkp_Index_Title"]</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none" style="color:var(--primary)">@Localizer["Common_Home"]</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer["Lkp_Index_Title"]</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+
+<div class="row g-3">
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-header fw-semibold">
+                <i class="fa-solid fa-table me-1"></i>@Localizer["Lkp_Label_Tables"]
+            </div>
+            <div class="list-group list-group-flush" id="lkpTableList">
+                @if (!tables.Any())
+                {
+                    <div class="list-group-item text-muted small text-center py-3">
+                        @Localizer["Lkp_Label_NoTablesYet"]
+                    </div>
+                }
+                @foreach (var t in tables)
+                {
+                    <button type="button"
+                            class="list-group-item list-group-item-action lkp-table-btn"
+                            data-table="@t.Name"
+                            data-display="@t.DisplayName">
+                        <i class="fa-solid fa-table-cells me-2 text-primary opacity-75"></i>@t.DisplayName
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span class="fw-semibold" id="lkpPanelTitle">
+                    <i class="fa-solid fa-arrow-left me-1 text-muted"></i>
+                    <span class="text-muted">@Localizer["Lkp_Label_SelectTable"]</span>
+                </span>
+                @if (canCreate)
+                {
+                    <button type="button" class="btn btn-primary btn-sm d-none" id="lkpCreateBtn">
+                        <i class="fa-solid fa-plus me-1"></i>@Localizer["Lkp_Label_AddNew"]
+                    </button>
+                }
+            </div>
+            <div class="card-body" id="lkpDataPanel">
+                <div class="text-center text-muted py-5">
+                    <i class="fa-solid fa-hand-pointer fa-2x mb-2 opacity-25"></i>
+                    <p class="mb-0">@Localizer["Lkp_Label_SelectTablePrompt"]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create / Edit Modal -->
+<div class="modal fade" id="lkpFormModal" tabindex="-1" aria-labelledby="lkpFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lkpFormModalLabel">
+                    <i class="fa-solid fa-plus me-2"></i><span id="lkpModalTitleText">@Localizer["Lkp_Label_AddNew"]</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="lkpFormMode" value="create" />
+                <input type="hidden" id="lkpFormRowId" value="" />
+                <div class="mb-3">
+                    <label class="form-label">@Localizer["Lkp_Column_NameAr"] <span class="text-danger">*</span></label>
+                    <input type="text" id="lkpFieldName" class="form-control" placeholder="Arabic name" />
+                    <div class="invalid-feedback">@Localizer["Lkp_Error_NameRequired"]</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">@Localizer["Lkp_Column_NameEn"]</label>
+                    <input type="text" id="lkpFieldNameEn" class="form-control" placeholder="English name" />
+                </div>
+                <div class="mb-3">
+                    <div class="form-check form-switch">
+                        <input type="checkbox" class="form-check-input" id="lkpFieldIsActive" checked />
+                        <label class="form-check-label" for="lkpFieldIsActive">@Localizer["Common_Active"]</label>
+                    </div>
+                </div>
+                <div class="alert alert-danger d-none" id="lkpFormError"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Common_Cancel"]</button>
+                <button type="button" class="btn btn-primary" id="lkpFormSaveBtn">
+                    <i class="fa-solid fa-floppy-disk me-1"></i>@Localizer["Common_Save"]
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete confirm modal -->
+<div class="modal fade" id="lkpDeleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title">
+                    <i class="fa-solid fa-triangle-exclamation text-danger me-2"></i>@Localizer["Common_ConfirmDelete"]
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body pt-2">
+                <p id="lkpDeleteBody" class="mb-0"></p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Common_Cancel"]</button>
+                <button type="button" class="btn btn-danger" id="lkpDeleteConfirmBtn">
+                    <i class="fa-solid fa-trash me-1"></i>@Localizer["Common_Delete"]
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function () {
+    var _token       = $('input[name="__RequestVerificationToken"]').val();
+    var _activeTable = null;
+    var _dtInstance  = null;
+    var _deleteRowId = null;
+    var canUpdate    = @Json.Serialize(canUpdate);
+    var canDelete    = @Json.Serialize(canDelete);
+
+    $(document).on('click', '.lkp-table-btn', function () {
+        $('.lkp-table-btn').removeClass('active');
+        $(this).addClass('active');
+        _activeTable = $(this).data('table');
+        var display  = $(this).data('display');
+        $('#lkpPanelTitle').html('<i class="fa-solid fa-table-cells me-2 text-primary"></i>' + display);
+        $('#lkpCreateBtn').removeClass('d-none');
+        loadTable(_activeTable);
+    });
+
+    function loadTable(table) {
+        var $panel = $('#lkpDataPanel');
+        if (_dtInstance) { _dtInstance.destroy(); _dtInstance = null; }
+
+        $panel.html(
+            '<div class="mb-3 d-flex gap-2" id="lkpSearchRow">' +
+                '<div class="input-group input-group-sm" style="max-width:200px">' +
+                    '<span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>' +
+                    '<input type="search" class="form-control" id="filterName" placeholder="Name…">' +
+                '</div>' +
+                '<div class="input-group input-group-sm" style="max-width:200px">' +
+                    '<span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>' +
+                    '<input type="search" class="form-control" id="filterNameEn" placeholder="Name EN…">' +
+                '</div>' +
+            '</div>' +
+            '<table id="lkpDt" class="table table-hover w-100"></table>'
+        );
+
+        var columns = [
+            { data: 'name',      title: '@Localizer["Lkp_Column_NameAr"]' },
+            { data: 'nameEn',    title: '@Localizer["Lkp_Column_NameEn"]', defaultContent: '—' },
+            { data: 'isActive',  title: '@Localizer["Common_Active"]', render: function(v) {
+                return v ? '<span class="badge badge-soft badge-soft-success">Yes</span>'
+                         : '<span class="badge badge-soft badge-soft-secondary">No</span>';
+            }},
+            { data: 'createdAt', title: '@Localizer["Common_Created"]', render: function(v) {
+                return v ? new Date(v).toLocaleDateString() : '—';
+            }}
+        ];
+
+        if (canUpdate || canDelete) {
+            columns.push({ data: null, title: '@Localizer["Common_Actions"]', orderable: false,
+                render: function(d, t, row) {
+                    var html = '<div class="d-flex gap-1">';
+                    if (canUpdate)
+                        html += '<button class="btn btn-outline-secondary btn-sm lkp-edit-btn" data-id="' + row.id + '" title="@Localizer["Common_Edit"]"><i class="fa-solid fa-pen-to-square"></i></button>';
+                    if (canDelete)
+                        html += '<button class="btn btn-outline-danger btn-sm lkp-delete-btn" data-id="' + row.id + '" data-name="' + _escHtml(row.name || '') + '" title="@Localizer["Common_Delete"]"><i class="fa-solid fa-trash"></i></button>';
+                    html += '</div>';
+                    return html;
+                }
+            });
+        }
+
+        _dtInstance = $('#lkpDt').DataTable({
+            serverSide: true,
+            processing: false,
+            ajax: {
+                url: '@Url.Action("GetData", "Lkp")', type: 'GET',
+                data: function (d) {
+                    var p = { draw: d.draw, start: d.start, length: d.length,
+                              sortColumn: d.order && d.order[0] ? d.order[0].column : 0,
+                              sortDirection: d.order && d.order[0] ? d.order[0].dir : 'asc',
+                              table: _activeTable };
+                    var n  = $('#filterName').val();
+                    var ne = $('#filterNameEn').val();
+                    if (n)  p['Filters[name]']   = n;
+                    if (ne) p['Filters[nameEn]'] = ne;
+                    return p;
+                }
+            },
+            columns: columns,
+            dom: "<'row'<'col-12't>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            pageLength: 10,
+            language: { emptyTable: '<div class="text-center py-3 text-muted"><i class="fa-solid fa-inbox fa-2x mb-2 d-block opacity-50"></i>@Localizer["Common_NoRecordsFound"]</div>' }
+        });
+
+        var t;
+        $panel.on('input', '#filterName, #filterNameEn', function () {
+            clearTimeout(t);
+            t = setTimeout(function () { _dtInstance.ajax.reload(null, false); }, 400);
+        });
+    }
+
+    $('#lkpCreateBtn').on('click', function () {
+        $('#lkpFormMode').val('create');
+        $('#lkpModalTitleText').text('@Localizer["Lkp_Label_AddNew"]');
+        $('#lkpFieldName').val('').removeClass('is-invalid');
+        $('#lkpFieldNameEn').val('');
+        $('#lkpFieldIsActive').prop('checked', true);
+        $('#lkpFormError').addClass('d-none').text('');
+        bootstrap.Modal.getOrCreateInstance($('#lkpFormModal')[0]).show();
+    });
+
+    $(document).on('click', '.lkp-edit-btn', function () {
+        var id = $(this).data('id');
+        $.get('@Url.Action("GetRow", "Lkp")', { table: _activeTable, id: id })
+            .done(function (row) {
+                $('#lkpFormMode').val('edit');
+                $('#lkpFormRowId').val(row.id);
+                $('#lkpModalTitleText').text('@Localizer["Common_Edit"]');
+                $('#lkpFieldName').val(row.name || '').removeClass('is-invalid');
+                $('#lkpFieldNameEn').val(row.nameEn || '');
+                $('#lkpFieldIsActive').prop('checked', row.isActive !== false);
+                $('#lkpFormError').addClass('d-none').text('');
+                bootstrap.Modal.getOrCreateInstance($('#lkpFormModal')[0]).show();
+            });
+    });
+
+    $('#lkpFormSaveBtn').on('click', function () {
+        var name = $('#lkpFieldName').val().trim();
+        if (!name) { $('#lkpFieldName').addClass('is-invalid'); return; }
+        $('#lkpFieldName').removeClass('is-invalid');
+
+        var mode = $('#lkpFormMode').val();
+        var url  = mode === 'edit' ? '@Url.Action("Edit", "Lkp")' : '@Url.Action("Create", "Lkp")';
+        var data = { __RequestVerificationToken: _token, table: _activeTable,
+                     name: name, nameEn: $('#lkpFieldNameEn').val().trim(),
+                     isActive: $('#lkpFieldIsActive').prop('checked') };
+        if (mode === 'edit') data.id = $('#lkpFormRowId').val();
+
+        var $btn = $('#lkpFormSaveBtn').prop('disabled', true);
+        $.post(url, data)
+            .done(function (res) {
+                if (res.success) {
+                    bootstrap.Modal.getOrCreateInstance($('#lkpFormModal')[0]).hide();
+                    _dtInstance && _dtInstance.ajax.reload(null, false);
+                } else {
+                    $('#lkpFormError').removeClass('d-none').text(res.message || '@Localizer["Lkp_Label_ErrorSaving"]');
+                }
+            })
+            .fail(function () {
+                $('#lkpFormError').removeClass('d-none').text('@Localizer["Common_UnexpectedError"]');
+            })
+            .always(function () { $btn.prop('disabled', false); });
+    });
+
+    $(document).on('click', '.lkp-delete-btn', function () {
+        _deleteRowId  = $(this).data('id');
+        var label     = $(this).data('name');
+        var msgTpl    = '@Html.Raw(Localizer["Lkp_Label_DeleteConfirm"].Value.Replace("'", "\\'"))';
+        $('#lkpDeleteBody').text(msgTpl.replace('{0}', label));
+        bootstrap.Modal.getOrCreateInstance($('#lkpDeleteModal')[0]).show();
+    });
+
+    $('#lkpDeleteConfirmBtn').on('click', function () {
+        bootstrap.Modal.getOrCreateInstance($('#lkpDeleteModal')[0]).hide();
+        $.post('@Url.Action("Delete", "Lkp")', {
+            __RequestVerificationToken: _token, table: _activeTable, id: _deleteRowId
+        }).done(function (res) {
+            if (res.success) _dtInstance && _dtInstance.ajax.reload(null, false);
+        });
+    });
+
+    function _escHtml(s) {
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+}());
+</script>
+}

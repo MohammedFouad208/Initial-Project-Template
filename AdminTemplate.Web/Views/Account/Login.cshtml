@@ -1,11 +1,11 @@
-﻿@model AdminTemplate.Web.ViewModels.LoginViewModel
+@model AdminTemplate.Web.ViewModels.LoginViewModel
 @{
     Layout = "_AuthLayout";
-    ViewData["Title"] = "Sign In";
+    ViewData["Title"] = Localizer["Login_Title"];
 }
 
-<h2 class="auth-title">Welcome back</h2>
-<p class="auth-subtitle">Sign in to your account to continue</p>
+<h2 class="auth-title">@Localizer["Login_Heading"]</h2>
+<p class="auth-subtitle">@Localizer["Login_Subtitle"]</p>
 
 @if (TempData["SuccessMessage"] != null)
 {
@@ -29,7 +29,7 @@
     }
 
     <div class="mb-4">
-        <label asp-for="Email" class="form-label">Email address</label>
+        <label asp-for="Email" class="form-label">@Localizer["Common_Email"]</label>
         <div class="field-icon-wrap">
             <i class="fa-regular fa-envelope field-icon"></i>
             <input asp-for="Email" class="form-control" placeholder="you@example.com" autocomplete="email" />
@@ -39,10 +39,10 @@
 
     <div class="mb-3">
         <div class="d-flex justify-content-between align-items-center mb-1">
-            <label asp-for="Password" class="form-label mb-0">Password</label>
+            <label asp-for="Password" class="form-label mb-0">@Localizer["Common_Password"]</label>
             <a asp-action="ForgotPassword" asp-controller="Account"
                class="text-decoration-none"
-               style="font-size:0.8125rem;color:var(--primary)">Forgot password?</a>
+               style="font-size:0.8125rem;color:var(--primary)">@Localizer["Login_ForgotPassword"]</a>
         </div>
         <div class="field-icon-wrap">
             <i class="fa-solid fa-lock field-icon"></i>
@@ -55,7 +55,7 @@
         <div class="form-check">
             <input asp-for="RememberMe" class="form-check-input" />
             <label asp-for="RememberMe" class="form-check-label" style="font-size:0.875rem">
-                Remember me for 30 days
+                @Localizer["Login_RememberMe"]
             </label>
         </div>
     </div>
@@ -63,7 +63,7 @@
     <div class="d-grid mb-2">
         <button type="submit" class="btn btn-primary btn-sm">
             <span class="btn-text">
-                Sign In &nbsp;<i class="fa-solid fa-arrow-right-to-bracket"></i>
+                @Localizer["Login_SignInButton"] &nbsp;<i class="fa-solid fa-arrow-right-to-bracket"></i>
             </span>
         </button>
     </div>
@@ -71,8 +71,8 @@
 </form>
 
 <div class="auth-footer-link">
-    Don&rsquo;t have an account?
-    <a asp-action="Register" asp-controller="Account">Create one</a>
+    @Localizer["Login_NoAccount"]
+    <a asp-action="Register" asp-controller="Account">@Localizer["Login_CreateOne"]</a>
 </div>
 
 @section Scripts {
