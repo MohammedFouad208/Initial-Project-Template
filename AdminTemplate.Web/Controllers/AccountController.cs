@@ -46,14 +46,14 @@ namespace AdminTemplate.Web.Controllers
             var result = await _accountService.LoginAsync(model.Email, model.Password, model.RememberMe);
             switch (result)
             {
-                case AdminTemplate.Application.Services.LoginResult.Success:
+                case LoginResult.Success:
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                         return LocalRedirect(returnUrl);
                     return RedirectToAction("Index", "Dashboard");
-                case AdminTemplate.Application.Services.LoginResult.Inactive:
+                case LoginResult.Inactive:
                     ModelState.AddModelError(string.Empty, _localizer["Login_Error_Inactive"]);
                     break;
-                case AdminTemplate.Application.Services.LoginResult.LockedOut:
+                case LoginResult.LockedOut:
                     ModelState.AddModelError(string.Empty, _localizer["Login_Error_LockedOut"]);
                     break;
                 default:
